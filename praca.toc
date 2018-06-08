@@ -1,0 +1,14 @@
+\select@language {polish}
+\contentsline {chapter}{\numberline {1}Wst\IeC {\k e}p}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Wprowadzenie}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}Motywacja}{3}{section.1.2}
+\contentsline {section}{\numberline {1.3}Cel pracy}{4}{section.1.3}
+\contentsline {section}{\numberline {1.4}Struktura pracy}{4}{section.1.4}
+\contentsline {chapter}{\numberline {2}Wykorzystany sprz\IeC {\k e}t i~narz\IeC {\k e}dzia}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Robot IRp-6}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Oprogramowanie bazowe}{5}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}ROS}{5}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Open Robot Control Software }{5}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Connman}{5}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Rviz}{5}{subsection.2.2.4}
+\contentsline {section}{\numberline {2.3}System IRPOS}{5}{section.2.3}

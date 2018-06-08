@@ -1,0 +1,155 @@
+% Copyright 2018 Politechnika Warszawska, all rights reserved
+% Autor: Maciej Bogusz
+% Bazuje na rozwiązaniu z: https://en.wikibooks.org/wiki/LaTeX/Title_Creation#A_title_to_be_re-used_multiple_times
+%
+% Strona tytułowa i oświadczenie o autorstwie dla prac dyplomowych inżynierskich na Wydziale Elektroniki i Technik Informacyjnych Politechniki Warszawskiej.
+% Użycie:
+% * Skopiuj cały ten katalog ('pweiti_titlepage') do katalogu głównego swojej pracy
+% * W głównym pliku pracy w preambule umieść poniższy kod i wpisz odpowiednie parametry:
+%  \usepackage[opcje]{graphicx}
+%  \usepackage[opcje]{helvet}
+%  \usepackage[opcje]{hyperref}
+%  \usepackage{pweiti_titlepage/pweiti_titlepage}
+%  \author{}
+%  \albumnumber{}
+%  \fieldofstudy{}
+%  \title{}
+%  \supervisor{}
+%  \institute{}
+% * Opcjonalnie umieść i uzupełnij:
+%  \thesistype{} % domyślnie: bsc, dopuszczalne wartości: bsc, msc
+%  \specialization{} % domyślnie: [brak]
+%  \location{} % domyślnie: WARSZAWA
+%  \consultations() % domyślnie: [brak]
+%  \thesisnumber() % domyślnie: [brak]
+% * Po otwarciu środowiska {document} umieść:
+%  \maketitle
+% * Po streszczeniu dodaj:
+%  \makeauthorshipstatement
+%
+% Lista WTF-ów oficjalnego wzorca strony tytułowej:
+% - jest .docx-em
+% - ma tytuł i nagłówek wstawione jako osadzone obrazki
+% - w/w obrazki są dość niskiej rozdzielczości
+% - użyte w w/w obrazkach zostały płatne/licencjonowane/niestandardowe czcionki: Adagio Slab Light i Helvetica (zarządzenie rektora 57/2016)
+% - odstępy zrobione wieloma pustymi liniami o różnych wysokościach/odstępach/etc
+%
+% Czcionki to wymysł kogoś z Wydziału Architektury w Biurze ds. Promocji i Informacji (i poza kiepską dostępnością mają wiele innych problemów)
+% Ich pliki można uzyskać np z w/w biura bądź z Oficyny Wydawniczej,
+%  ale powodzenia w użyciu OTF w połączeniu z kerningiem (rozstrzeleniem) w *TeX-ie (PDFLaTeX nie ogarnia OTF, XeLaTeX kerningu etc).
+% Stąd poniżej zembedowane są grafiki wektorowe zembedowane w pdf-ach (utworzone w Inkscape'ie)
+
+\ProvidesPackage{pweiti_titlepage/pweiti_titlepage}[2018/01/08 v0.0.3]
+\RequirePackage{graphicx}
+\RequirePackage{helvet}
+\RequirePackage{hyperref}
+\usepackage{ifthen}
+
+\newcommand*{\thesistype}[1]{\gdef\@thesistype{#1}}
+\newcommand*{\@thesistype}{bsc}
+\newcommand*{\institute}[1]{\gdef\@institute{#1}}
+\newcommand*{\@institute}{\texttt{\string\institute} not set, please fix this}
+\newcommand*{\fieldofstudy}[1]{\gdef\@fieldofstudy{#1}}
+\newcommand*{\@fieldofstudy}{\texttt{\string\fieldofstudy} not set, please fix this}
+\newcommand*{\specialization}[1]{\gdef\@specialization{#1}}
+\newcommand*{\@specialization}{}
+\newcommand*{\albumnumber}[1]{\gdef\@albumnumber{#1}}
+\newcommand*{\@albumnumber}{\texttt{\string\albumnumber} not set, please fix this}
+\newcommand*{\supervisor}[1]{\gdef\@supervisor{#1}}
+\newcommand*{\@supervisor}{\texttt{\string\supervisor} not set, please fix this}
+\newcommand*{\consultations}[1]{\gdef\@consultations{#1}}
+\newcommand*{\@consultations}{}
+\newcommand*{\thesisnumber}[1]{\gdef\@thesisnumber{#1}}
+\newcommand*{\@thesisnumber}{}
+\newcommand*{\location}[1]{\gdef\@location{#1}}
+\newcommand*{\@location}{WARSZAWA}
+
+\newcommand{\textwithfont}[3] {\fontfamily{#1}\fontsize{#2}{#2}\selectfont #3}
+
+\renewcommand*{\maketitle}{%
+
+\pagenumbering{gobble}
+\newgeometry{margin=2.5cm,bottom=1.5cm}
+\hypersetup{pageanchor=false}
+
+\begin{titlepage}
+	\begin{center}
+		\includegraphics{pweiti_titlepage/titlepage_header.pdf}
+
+		\vspace{22mm}
+		\textwithfont{phv}{12}{\@institute}
+
+		\vspace{15mm}
+		\ifthenelse{\equal{\@thesistype}{msc}}{
+			\includegraphics{pweiti_titlepage/titlepage_title_msc.pdf}
+		} {
+			\includegraphics{pweiti_titlepage/titlepage_title_bsc.pdf}
+		}
+
+		\vspace{5mm}
+		\textwithfont{phv}{12}{
+			na kierunku \@fieldofstudy
+			\medskip \\
+			\ifthenelse{\equal{\@specialization}{}}{
+				\bigskip
+			}{
+				\textwithfont{phv}{12}{w specjalności \@specialization}
+			}
+		}
+
+		\vspace{18mm}
+		\textwithfont{phv}{14}{\@title}
+
+		\vspace{18mm}
+		\ifthenelse{\equal{\@thesisnumber}{}}{
+			\bigskip
+		}{
+			\textwithfont{phv}{12}{numer pracy według wydziałowej ewidencji prac \@thesisnumber}
+		}
+
+		\bigskip
+		\textwithfont{phv}{25}{\@author}\\
+		\bigskip
+		\textwithfont{phv}{12}{Numer albumu \@albumnumber}
+
+		\vspace{12mm}
+		\textwithfont{phv}{12}{
+			promotor \\
+			\smallskip
+			\@supervisor \\
+		}
+		\ifthenelse{\equal{\@consultations}{}}{}{
+			\bigskip
+			\textwithfont{phv}{12}{
+				konsultacje \\
+				\smallskip
+				\@consultations
+			}
+		}
+
+		\vfill
+		\textwithfont{phv}{12}{
+			\uppercase{\@location{}} \the\year
+		}
+	\end{center}
+\end{titlepage}
+
+\null
+\thispagestyle{empty}%
+\newpage
+
+\hypersetup{pageanchor=true}
+\restoregeometry
+\pagenumbering{arabic}
+}
+
+\newcommand{\makeauthorshipstatement}{
+	\newpage
+	\newgeometry{margin=0.5cm}
+	\begin{center}
+		\includegraphics[width=\textwidth]{pweiti_titlepage/titlepage_zaswiadczenie.png}
+	\end{center}
+	\restoregeometry
+}
+
+\endinput
