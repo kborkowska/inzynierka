@@ -1,0 +1,35 @@
+% TeX encoding = utf8
+% TeX spellcheck = pl_PL 
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{polski}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{amsfonts}
+\usepackage{geometry}
+\usepackage{multicol}
+
+\newgeometry{tmargin=3cm, bmargin=3cm, lmargin=2cm, rmargin=2cm}
+
+\pagestyle{empty}
+
+\title{Zapis zadań do pracy inżynierskiej \author{Karolina Borkowska}}
+
+\begin{document}
+
+	\maketitle
+
+	\vspace{50px}
+
+	W celu zaimplementowania algorytmu wykrywającego możliwe przekroczenie ograniczeń robota~w trakcie wykonywania zadanej trajektorii należy rozpoznać wyżej wymienione ograniczenia. Kolejne kroki zostaną wykonane by zidentyfikować właściwości robota:
+	\begin{itemize}
+	\item Implementacja komponentu OROCOS, który zastąpi obecny generator trajektorii na czas badań. Będzie on obliczać trapezoidalną trajektorię na podstawie podanych~w poleceniu wartości: punktu końcowego, przyśpieszenia oraz prędkości maksymalnej. 
+	\item Zebranie danych o położeniu stawów do obliczenia uchybu. Przekroczenie wskaźnika jakości, bazującego na uchybie, wskazywać ma wykroczenie poza ograniczenia robota. Zapis i analiza danych powinna obywać się offline by nie wpływać na pracę regulatora.
+	
+	\end{itemize}
+	
+	
+\end{document}
+
+

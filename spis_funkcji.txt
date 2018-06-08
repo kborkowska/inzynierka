@@ -1,0 +1,162 @@
+
+class IRPOS:
+
+	BCOLOR = '\033[94m'
+	ENDC = '\033[0m'
+
+	robot_name = None
+	robot_joint_names = None
+
+	#Conman is a controller and state estimator manager built on top of the 
+	#Oroocos Toolchain and designed to create a common platform for sharing 
+	#robot controllers and state estimators. Conman enforces additional 
+	#constraints on when and how components can be running in order to prevent 
+	#errors and improve robustness when switching components in and out of 
+	#the control loop at runtime.
+	conmanSwitch = None
+	
+	motor_client = None
+	joint_client = None
+	tool_client = None
+	pose_client = None
+	tfg_motor_client = None  #tfg == gripper
+	tfg_joint_client = None
+
+	motor_position_subscriber = None
+	joint_position_subscriber = None
+	tfg_motor_position_subscriber = None
+	tfg_joint_position_subscriber = None
+	cartesian_position_subscriber = None
+	wrench_subscriber = None
+
+	last_motor_position = None
+	last_joint_position = None
+	last_tfg_motor_position = None
+	last_tfg_joint_position = None	
+	last_cartesian_position = None	
+	last_wrench = None
+
+
+	#Once a thread has acquired a primitive lock object, subsequent attempts 
+	#to acquire it block, until it is released; any thread may release it.
+
+	#The lock keyword ensures that one thread does not enter a critical 
+	#section of code while another thread is in the critical section. 
+	#If another thread tries to enter a locked code, it will wait, block, 
+	#until the object is released.The lock keyword ensures that one thread 
+	#does not enter a critical section of code while another thread is in 
+	#the critical section. If another thread tries to enter a locked code, 
+	#it will wait, block, until the object is released.
+
+	lmp_lock = threading.Lock() #last motor position
+	ljp_lock = threading.Lock() #last joint position
+	ltfgmp_lock = threading.Lock() #last gripper motor position
+	ltfgjp_lock = threading.Lock() #last gripper joint position
+	lcp_lock = threading.Lock() #last cartesian position
+	lw_lock = threading.Lock() #last wrench
+
+	fcl_param_publisher = None #fcl - force controller
+	tg_param_publisher = None #tg - tool gravity 
+
+	tool_weight = None
+	tool_mass_center = None
+
+	def __init__(self, nodeName, robotName, robotJointNumbers, scheme_name):
+		
+	def motor_position_callback(self, data):
+		#returns last motor position, checks while in lock
+		
+	def joint_position_callback(self, data):
+		#returns last joint position, checks while in lock
+
+	def tfg_motor_position_callback(self, data):
+		#returns last gripper motor position, checks while in lock
+
+	def tfg_joint_position_callback(self, data):
+		#returns last gripper joint position, checks while in lock
+	
+	def cartesian_position_callback(self, data):
+		#returns cartesian position position, checks while in lock
+	
+	def wrench_callback(self, data):
+		#returns last wrench, checks while in lock
+
+	def get_zeros_vector(self):
+		#returns zero-filled vector, size eq no of robot joints
+
+	def spline_error_code_to_string(self, error_code):
+		#converts spline (funkcja sklejana) error code to its correponding message
+		#possible outputs: "SUCCESSFUL"; "INVALID_GOAL"; "INVALID_JOINTS" ;
+		#"OLD_HEADER_TIMESTAMP"; "PATH_TOLERANCE_VIOLATED"; "GOAL_TOLERANCE_VIOLATED"
+		#"UNKNOWN"
+
+	def cartesian_error_code_to_string(self, error_code):
+		#converts cartesian error code to its correponding message
+		#possible outputs: "SUCCESSFUL"; "ROOT_TRANSFORM_FAILED"; 
+		#"TOOL_TRANSFORM_FAILED"; "PATH_TOLERANCE_VIOLATED"; "INVALID_POSTURE"
+		#"UNKNOWN"
+
+
+        def move_to_synchro_position(self, duration):
+		
+	# MOTOR POSITION   
+
+	def move_to_motor_position(self, motor_positions, time_from_start):
+
+	def move_rel_to_motor_position(self, motor_positions, time_from_start):
+
+	def move_along_motor_trajectory(self, points):
+
+	def get_motor_position(self):
+
+	# JOINT POSITION
+
+	def move_to_joint_position(self, joint_positions, time_from_start):
+
+	def move_rel_to_joint_position(self, joint_positions, time_from_start):
+
+	def move_along_joint_trajectory(self, points):
+		
+	def get_joint_position(self):
+		
+	# CARTESIAN POSITION
+
+	def move_to_cartesian_pose(self, time_from_start, pose):
+		
+	def move_rel_to_cartesian_pose(self, time_from_start, rel_pose):
+		
+	def move_rel_to_cartesian_pose_with_contact(self, time_from_start, rel_pose, wrench_constraint):
+
+	def move_along_cartesian_trajectory(self, points):
+		
+	def move_along_cartesian_circle(self, P1, P2, P3, time_from_start):
+  
+	def get_cartesian_pose(self):
+
+	# TOOL PARAMS
+
+	def set_tool_geometry_params(self, transformation):
+		
+	def set_tool_physical_params(self, weight, mass_center_position):
+		
+	# FORCE CONTROL
+
+	def start_force_controller(self, inertia, reciprocaldamping, wrench, twist):
+		
+	def set_force_controller_goal(self, inertia, reciprocaldamping, wrench, twist):
+
+	def stop_force_controller(self):
+		
+	def get_force_readings(self):
+		
+	# GRIPPER
+
+	def tfg_to_motor_position(self, motor_position, time_from_start):
+
+	def tfg_to_joint_position(self, joint_position, time_from_start):
+
+	def get_tfg_motor_position(self):
+	
+	def get_tfg_joint_position(self):
+		
+
