@@ -1,0 +1,32 @@
+% TeX encoding = utf8
+% TeX spellcheck = pl_PL 
+
+\chapter{Wstęp}
+\label{chapter:wstep}
+%Rozdział ten pełni funkcję wstępu do niniejszej pracy. Przybliża on jej tematykę
+%i cel oraz pokazuje układ rozdziałów. Przedstawia także motywację,
+%dzięki której zagadnienie to zostało zbadane.
+	
+	
+		\section{Wprowadzenie}
+		\label{Wprowadzenie}
+		%krótki opis zagadnienia
+		Mechanizmy imitujące ludzi i~zwierzęta wydają się być częścią wspólnej kulturowej świadomości od początku istnienia cywilizacji. Mitologie Egipcjan, Greków, Hindusów czy Izraelitów wspominają o~urządzeniach, które współczesny czytelnik mógłby nazwać robotami. Największe umysły w historii aspirowały do stworzenia pierwszego autonomicznego pracownika. Wśród pierwszych konstruktorów można znaleźć Leonardo da Vinci'ego, czy Archytas'a z~Tarentu. To, co dla naszych poprzedników pozostawało jedynie fikcją, stało się nieodzowną częścią przemysłu w~XX wieku. Już pierwsze roboty firmy Unimation cechowały się dokładnością znacznie przewyższająca możliwości ludzkie, dodatkowo zapewniając szybszą produkcję oraz większe bezpieczeństwo pracowników. 
+		
+		Jednym z~najczęściej spotkanych typów robotów przemysłowych jest manipulator. W~swej budowie przypominają one górne kończyny ludzkie. Zakończone są chwytakami, które choć z~zasady mają być odwzorowaniem ludzkiej dłoni, są raczej jej dużym uproszczeniem lub wręcz modyfikacją wprowadzoną do wykonania konkretnego zadania. Człowiek intuicyjnie wybiera rozwiązanie przypominające wytwory natury, przez co manipulatory znajdują szerokie zastosowanie w~najróżniejszych gałęziach przemysłu.  Sprzęt taki jak kamery, taśmy produkcyjne lub tor jezdny, to podstawowe rozszerzenia, jakie dodawane są do systemów robotycznych, w~celu automatyzacji kolejnych etapów produkcji. Od fabryk samochodów, po te skupiające się na wyrobach spożywczych, manipulatory są integralną częścią nowoczesnej cywilizacji.
+
+		
+		\section{Motywacja}
+		\label{Motywacja}
+		System IrpOS zapewnia prosty interfejs do pracy z~robotami IRp-6 znajdującymi się w~laboratorium 012 Wydziału Elektroniki i~Technik Informacyjnych. Za jego pomocą powstają prace dyplomowe, systemy prototypowe oraz prowadzone są zajęcia dydaktyczne. Jednakże istnieją obszary w~których można rozwinąć to oprogramowanie w~celu ułatwienia sterowania robotami. Pierwotnie system w~żaden sposób nie analizował zadanej trajektorii, po czym dodano sprawdzanie czy poszczególne punkty do osiągnięcia znajdują się w~przestrzeni roboczej sprzętu. W~obecnej postaci możliwe jest przekroczenie ograniczeń kinematycznych i~dynamicznych robota, poprzez zadanie zbyt krótkiego czasu na osiągnięcie kolejnych pozycji. Nowa funkcjonalność mogłaby przyśpieszyć tworzenie programów i~wykrywanie błędów, efektywnie prowadząc do prac lepszej jakości.
+		
+		%System nie informuje a~priori użytkownika o~zadaniu zbyt krótkiego czasu ruchu robota w~żadnym z~trybów pracy. 
+		
+		
+		\section{Cel pracy}
+		\label{Cel}
+		Celem niniejszej pracy było stworzenie dodatkowej funkcjonalności systemu IrpOS, która nie pozwoliłaby użytkownikowi na zadanie za krótkiego czasu ruchu. Dodatkowo do terminala wysyłana jest informacja o~popełnionym błędzie. Skupiono się na stworzeniu rozwiązania działającego w~przestrzeni stawów. Nie zmieniono interfejsu użytkownika, a jedynie dodano analizę trajektorii po odebraniu polecania przez system. Obliczone zostają maksymalne prędkość i~przyśpieszenie potrzebne do osiągnięcia zadanej konfiguracji w~danym czasie dla kolejno każdego stawu. Jeśli którykolwiek ruch powoduje przekroczenie ograniczeń kinematycznych lub dynamicznych, wywołana zostaje wyżej wspomniana procedura. 
+		
+		\section{Struktura pracy}
+		\label{Struktura}
+		Praca składa się z~sześciu rozdziałów. Rozdział 2~przedstawia sprzęt i~narzędzia wykorzystywane do stworzenia pracy. Rozdział 3~prezentuje projekt rozwiązania wybranego problemu. Rozdział 4~opisuje jak realizowano zaproponowane rozwiązanie. Rozdział 5~skupia się na sposobie i~wynikach badania poprawności działania nowej funkcjonalności. Rozdział 6~podsumowuje wyniki pracy.

@@ -1,0 +1,174 @@
+\documentclass[11pt, a4paper, openright]{report}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[english,polish]{babel}
+\usepackage[pdftex]{graphicx}
+\usepackage[normalem]{ulem}
+\usepackage{float}
+\usepackage{indentfirst}
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage{caption}
+
+% \usepackage{mathtools}
+% \usepackage{listings}
+% \usepackage{color}
+% \usepackage{xcolor}
+% \usepackage{subcaption}
+% \usepackage{tabularx}
+
+\renewcommand\thechapter{\arabic{chapter}.}
+\renewcommand\thesection{\arabic{chapter}.\arabic{section}.}
+\renewcommand\thesubsection{\arabic{chapter}.\arabic{section}.\arabic{subsection}.}
+\renewcommand\thesubsubsection{\arabic{chapter}.\arabic{section}.\arabic{subsection}.\arabic{subsubsection}.}
+
+\setcounter{tocdepth}{4}
+
+
+\begin{document}
+% \maketitle
+\begin{titlepage}
+	\centering
+	{\scshape\Large Politechnika Warszawska \par}
+	{\scshape\Large Wydział Elektroniki i Technik Informacyjnych \par}
+	{\scshape\Large Instytut Automatyki i Informatyki Stosowanej \par}
+	\vspace{8cm}
+	{\huge\bfseries Sprawozdanie \par}
+	\vspace{1cm}
+	{\scshape\large z przygotowania pracy dyplomowej inżynierskiej (PDI2) \par}
+	\vspace{2cm}
+	{\Large Generacja trajektorii w systemie IRPOS \par}
+	\vspace{2cm}
+	{\Large Karolina Borkowska\par}
+	\vfill
+
+	Opiekun~naukowy:\par
+	dr inż. Tomasz Winiarski
+
+	\vfill
+	{\large \today\par}
+\end{titlepage}
+
+% Abstract
+	\noindent\begin{minipage}{\linewidth}
+		\renewcommand{\abstractname}{Streszczenie}
+		\setlength{\parindent}{15pt}
+
+		\begin{abstract}
+			\textbf{Tytuł: Generacja trajektorii w systemie IRPOS}\\
+			Celem pracy inżynierskiej była modyfikacja systemu IRPOS, umożliwiająca sprawdzenie, czy w~trakcie osiągania przez robota IRp6 punktów zadanej drogi nie zostaną naruszone jego ograniczenia fizyczne i~dynamiczne. A priori przeanalizowana zostaje trajektoria, którą poruszać się ma robot, by osiągnąć zadane położenie.
+			Zmodernizowany został komponent OROCOS, odpowiedzialny za odbieranie i~wstępne sprawdzenie zadania robota.
+			Dodatkowo nowa funkcjonalność wstrzymuje dalsze przetwarzanie rozkazu i~związany z~nim ruch. Jest to podejście zgodne z~wcześniej zaimplementowaną koncepcją reakcji na zadanie punktu końcowego niemożliwego do osiągnięcia dla danego stawu.
+
+		\end{abstract}
+		\textbf{Słowa kluczowe:}
+		robot IRp6, manipulator robotyczny, system IRPOS, planowanie trajektorii manipulatora, OROCOS, Open Robot Control Software 
+
+
+	\end{minipage}
+	\vfill
+
+	\noindent\begin{minipage}{\linewidth}
+		\selectlanguage{english}
+		\renewcommand{\abstractname}{Abstract}
+		\setlength{\parindent}{15pt}
+
+		\begin{abstract}
+			\textbf{Title: Generation of robot trajectory in IRPOS system}\\
+			The aim of this thesis was modificating IRPOS system, that enables checking whether, during IRp6 robot's movement in the direction of setpoints, the physical and dynamic limitations of the robot are not breached. A priori a possible trajectory is analysed. OROCOS component, responsible for receiving and initial movement task test, was modernised.  Moreover, the new functionality blocks further setpoint message processing, thus halting robot's movement. This approach is in accordance with the previously implemented reaction to a setpoint that is impossible to reach by a given joint.
+		\end{abstract}
+
+		\textbf{Keywords:}
+		IRp6 robot, manipulator robot, IRPOS system, manipulator trajectory planning, OROCOS, Open Robot Control Software 
+
+
+		\selectlanguage{polish}
+	\end{minipage}
+	\vfill
+
+% Abstract (end)
+
+\tableofcontents{}
+\pagebreak
+
+\chapter{Wstęp}
+\label{ch:wstep}
+	\section{Wprowadzenie}
+	\label{s:wprowadzenie}
+	\section{Motywacja}
+	\label{s:motywacja}
+	\section{Cel pracy}
+	\label{s:cel_pracy}
+	\section{Układ pracy}
+	\label{s:uklad_pracy}
+
+\chapter{Wykorzystany sprzęt i narzędzia}
+\label{ch:sprzęt_i_narzędzia}
+	\section{Robot IRp6}
+	\label{s:robot_irp6}
+	\section{Oprogramowanie bazowe}
+	\label{s:oprogramowanie_baz}
+		\subsection{ROS}
+		\label{ss:ros2}
+		\subsection{Open Robot Control Software }
+		\label{ss:orocos}
+		\subsection{Connman}
+		\label{ss:connman}
+		\subsection{Rviz}
+		\label{ss:rviz}
+	\section{System IRPOS}
+	\label{s:irpos}
+		
+\chapter{Projekt rozwiązania}
+\label{ch:projekt_rozwiazania}
+	\section{Ograniczenia projektowe}
+	\label{s:ograniczenia}
+	\section{Założenia projektowe}
+	\label{s:zalozenia}
+	\section{Przebieg zadania}
+	\label{s:przebieg}
+	
+\chapter{Realizacja}
+\label{ch:realizacja}
+	\section{Generowanie trajektorii}
+	\label{s:traj_gen}
+		\subsection{Proponowany algorytm}
+		\label{ss:traj_gen_teoria}
+		\subsection{Komponenty generujące trajektorię}
+		\label{ss:traj_gen_components}
+	\section{Badanie właściwości fizycznych robota}
+	\label{s:badanie_ograniczen}
+		\subsection{Założenia systemu badawczego}
+		\label{ss:zalozenia_systemu_badawczego}
+		\subsection{Struktura systemu badawczego}
+		\label{ss:struktura_systemu_badawczego}
+		\subsection{Analiza uchybów położenia stawów}
+		\label{ss:obsluga_stanow_krytycznych}
+	\section{Modyfikacje systemu IRPOS}
+	\label{s:mod_irpos}
+		\subsection{Algorytm analizujący trajektorię}
+		\label{ss:traj_analiza}
+		\subsection{Reakcja na możliwe przekroczenie ograniczeń robota}
+		\label{ss:lqr}
+
+\chapter{Badania}
+\label{ch:badania}
+	\section{Testowanie przekraczania prędkości maksymalnej}
+	\label{s:testowanie_przekraczania_prędkości_maksymalnej}
+	\section{Testowanie przekraczania przyśpieszenia maksymalnego}
+	\label{s:testowanie_przekraczania_przyśpieszenia_maksymalnego}
+	
+\chapter{Podsumowanie}
+\label{ch:podsumowanie}
+	\section{Wyniki pracy}
+	\label{s:wyniki_pracy}
+	\section{Wnioski}
+	\label{s:wnioski}
+	\section{Kontynuacja}
+	\label{s:kontynuacja}
+
+
+
+\end{document}
