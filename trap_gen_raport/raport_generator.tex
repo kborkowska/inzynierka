@@ -535,7 +535,7 @@
 	\section{Testowanie}
 	Testowanie generatora rozpoczęto od sprawdzenia, czy działał on przy najprostszych przykładach. Następnie przetestowano wykrywanie nierealizowanych zadanych. Każda próba została poprzedzona oceną zadanych za pomocą skryptów Matlab'owych. Dla funkcji działających w~przestrzeni stawów dodatkowo sprawdzano czy przeniesienie trajektorii do przestrzeni silników nie spowoduje problemów. Wyniki oceniano na podstawie zebranych danych o~położeniach trajektorii wytworzonej przez generator, ostatecznego wyniku pobranego przez IRPOS-api oraz na podstawie obrazu wizualizacji. Każda z~funkcji przedstawionych w~\hyperref[sec:api]{sekcji 5} została przetestowana oddzielnie. Zgodnie z~założeniami przedstawionymi w~\hyperref[sec:borderVels]{sekcji 5.5}, nie testowano nadania prędkości granicznych.
 	\subsection{\texttt{move\_to\_motor\_position\_trapezoid\_velocity}}
-	Testowanie funkcji działającej w~przestrzeni stawów w~trybie prędkościowym.
+	Testowanie funkcji działającej w~przestrzeni silników w~trybie prędkościowym.
 	\subsubsection{Proste działanie w~trybie niebadawczym}
 	\label{sec:MPV}
 	Początkowo zadano nastawy, które wymuszały ruch tylko jednego silnika. Podane są w~\hyperref[tab:setup1]{tablicy 7}, każdy wiersz reprezentuje oddzielną symulację. Następnie zastosowano te same nastawy, ale tym razem jednocześnie. W~kolejnym kroku przeprowadzono symulację ruchu w~drugą stronę. 	
@@ -700,7 +700,7 @@
 	Otrzymane wykresy są tożsame z~wykresami otrzymanymi w~sekcji \hyperref[sec:MPV]{8.1.1}, co łącząc z~wynikami ruchu odwrotnego silnika 4, pozwala stwierdzić, że tryb badawczy działa zgodnie z~założeniami. 
 
 	\subsection{\texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity}}
-	Testowanie funkcji działającej w~przestrzeni stawów w~trybie prędkościowym, pozwalającej na osiągnięcie kilku kolejnych punktów przy jednym wywołaniu funkcji. 
+	Testowanie funkcji działającej w~przestrzeni silników w~trybie prędkościowym, pozwalającej na osiągnięcie kilku kolejnych punktów przy jednym wywołaniu funkcji. 
 	\subsubsection{Proste działanie w~trybie niebadawczym}
 	\label{sec:MTV}
 	Ponownie przeprowadzono najpierw badania trajektorii oddzielnie dla każdego silnika, następnie dla wszystkich naraz. Nie przeprowadzano badań oddzielnie dla ruchu $ q_i>q_f $ ze względu na zawarcie ich w~trajektorii zadanej. Zadane przedstawiono w~\hyperref[tab:setup5]{tablicy 11}. Pominięto w~niej prędkości początkowe i~końcowe, które nie podgalają badaniu.
@@ -788,6 +788,84 @@
 	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników. Tryb badawczy.}
 	\label{tab:setup6}
 	\end{table}	
+	
+	\section{\texttt{move\_to\_motor\_position\_trapezoid\_duration}}
+	Testowanie funkcji działającej w~przestrzeni silników w~trybie czasowym.
+	\subsection{Proste działanie w~trybie niebadawczym}
+	Wykonano testy analogiczne do tych z~sekcji \ref{sec:MPV}. Wyniki przedstawiono w~tabelach \ref{tab:setup7} i~\ref{tab:setup8} oraz  na wykresach \ref{fig:simpMPD}, \ref{fig:simpMPDrevers} i~\ref{fig:simpMPDall}. Warto zauważyć, że wywołanie funkcji, nie zawiera nadania prędkości i~przyśpieszenia maksymalnego. Podane w tabelach wartości są wpisane do plików konfiguracyjnych.
+
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & 400.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %400.01624549348827
+	\hline
+	\hspace{1em}2& 0.0 & 100.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %100.06493977550167
+	\hline
+	\hspace{1em}3& 0.0 & 100.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %100.05074855824355
+	\hline
+	\hspace{1em}4& 0.0 & 350.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %350.03683107162874
+	\hline
+	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %400.0004100112147
+	\hline
+	\hspace{1em}6& 0.0 & 2000.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %2000.0423718337847
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:setup7}
+	\end{table}
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & -400.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-400.0162154089848
+	\hline
+	\hspace{1em}2& 0.0 & -100.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-100.06384704599024
+	\hline
+	\hspace{1em}3& 0.0 & -70.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-70.04977729182792
+	\hline
+	\hspace{1em}4& 0.0 & -60.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-60.036372838521224
+	\hline
+	\hspace{1em}5& 0.0 & -70.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-70.00005703129563
+	\hline
+	\hspace{1em}6& 0.0 & -900.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-900.0418019049634
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:setup8}
+	\end{table}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.2]{raport_graphs/simpMPD.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup7}.}
+		\label{fig:simpMPD}
+	\end{figure}
+
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.2]{raport_graphs/simpMPDrevers.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup8}.}
+		\label{fig:simpMPDrevers}
+	\end{figure}
+		
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMPDall.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup7}.}
+		\label{fig:simpMPDall}
+	\end{figure}	
+	
+	Ważnym jest by zwrócić uwagę na fakt, że w~trybie czasowym wszystkie silniki pracują tak samo długo (patrz rysunek \ref{fig:simpMPDall}).
+	
 \newpage	
 \begin{thebibliography}{9}
 \bibitem{ROS} 
