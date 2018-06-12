@@ -1,0 +1,141 @@
+% !TeX document-id = {94f9f4ef-72ec-4951-a610-9b7f494f2a41}
+
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{polski}
+\usepackage[pdftex]{graphicx}
+\usepackage{listings}
+\usepackage{amsfonts}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{indentfirst}
+\usepackage{secdot}
+\usepackage[section]{placeins}
+\usepackage[table]{xcolor}
+\usepackage{float}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usetikzlibrary{external}
+\usetikzlibrary{pgfplots.groupplots}
+\pgfplotsset{compat=1.11}
+\textwidth 160mm \textheight 247mm
+\tikzexternalize
+
+\pgfplotsset{width=\figurewidth,compat=1.11}
+\pgfplotsset{
+	tick label style={font=\scriptsize},
+	label style={font=\small},
+	legend style={font=\small},
+	title style={font=\small}
+}
+
+\begin{document}
+
+
+\begin{figure}[tb]
+\tikzsetnextfilename{simpMTVRall}
+\begin{tikzpicture}
+	\begin{groupplot}[group style={group size=2 by 3, horizontal sep={1.2cm},vertical sep={2cm}},
+	width=0.95\textwidth,height=0.4\textwidth]
+	\nextgroupplot
+	[
+	width=0.52\textwidth,
+	xmin=0,xmax=80,ymin=-210,ymax=410,
+	xlabel={$t$},
+	ylabel={$Position$},
+	xtick={0,10,30,50,70},
+	ytick={-200,-100,0,100,200,300,400},
+	extra y ticks={400,200,-200,100},
+	extra x ticks={18.5,40.8,64.8,79.7},
+	extra tick style={grid=major},
+	y tick label style={/pgf/number format/1000 sep=},
+	title = Wyniki dla silnika nr 1,
+	]
+	\addplot[blue,semithick] file {SymulationResults/MTVR:25.000000:10.000000:0.000000:400.000000:400.000000:200.000000:200.000000:-200.000000:-200.000000:100.000000/joint-1-result(p)(p).txt};
+	
+	\nextgroupplot
+	[
+	width=0.52\textwidth,
+	xmin=0,xmax=80,ymin=-110,ymax=110,
+	xlabel={$t$},
+	%ylabel={$Position$},
+	xtick={0,10,30,60},
+	ytick={-100,-50,0,50,100},
+	extra y ticks={-100,100,20,0},
+	extra x ticks={4.5,37.7,50.3,67.8},
+	extra tick style={grid=major},
+	y tick label style={/pgf/number format/1000 sep=},
+	title = Wyniki dla silnika nr 2,
+	]
+	\addplot[red,semithick] file {SymulationResults/MTVR:25.000000:10.000000:0.000000:400.000000:400.000000:200.000000:200.000000:-200.000000:-200.000000:100.000000/joint-2-result(p)(p).txt};
+		
+	\nextgroupplot
+	[
+	width=0.52\textwidth,
+	xmin=0,xmax=80,ymin=-80,ymax=60,
+	xlabel={$t$},
+	ylabel={$Position$},
+	xtick={0,10,20,50,70},
+	ytick={-70,-50,0,50,30},
+	extra y ticks={-70,50,0,-30},
+	extra x ticks={3.7,35.4,49.5,68.5},
+	extra tick style={grid=major},
+	y tick label style={/pgf/number format/1000 sep=},
+	title = Wyniki dla silnika nr 3,
+	]
+	\addplot[green,semithick] file {SymulationResults/MTVR:25.000000:10.000000:0.000000:400.000000:400.000000:200.000000:200.000000:-200.000000:-200.000000:100.000000/joint-3-result(p)(p).txt};
+	
+	\nextgroupplot
+	[
+	width=0.52\textwidth,
+	xmin=0,xmax=80,ymin=-60,ymax=360,
+	xlabel={$t$},
+	%ylabel={$Position$},
+	xtick={0,30},
+	ytick={-50,0,100,200,300},
+	extra y ticks={350,100,200,-50},
+	extra x ticks={11.7,39.2,50.9,74.8},
+	extra tick style={grid=major},
+	y tick label style={/pgf/number format/1000 sep=},
+	title = Wyniki dla silnika nr 4,
+	]
+	\addplot[orange,semithick] file {SymulationResults/MTVR:25.000000:10.000000:0.000000:400.000000:400.000000:200.000000:200.000000:-200.000000:-200.000000:100.000000/joint-4-result(p)(p).txt};
+	
+	\nextgroupplot
+	[
+	width=0.52\textwidth,
+	xmin=0,xmax=80,ymin=-10,ymax=410,
+	xlabel={$t$},
+	ylabel={$Position$},
+	xtick={0,30,50},
+	ytick={0,100,200,300,400},
+	extra y ticks={400,0,100},
+	extra x ticks={13.2,43.5,70.1},
+	extra tick style={grid=major},
+	y tick label style={/pgf/number format/1000 sep=},	
+	title = Wyniki dla silnika nr 5,
+	]
+	\addplot[magenta,semithick] file {SymulationResults/MTVR:25.000000:10.000000:0.000000:400.000000:400.000000:200.000000:200.000000:-200.000000:-200.000000:100.000000/joint-5-result(p)(p).txt};
+	\nextgroupplot
+	[
+	width=0.52\textwidth,
+	xmin=0,xmax=80,ymin=-1010,ymax=110,
+	xlabel={$t$},
+	%ylabel={$Position$},
+	xtick={0,10},
+	ytick={-1000,-500,0,100},
+	extra y ticks={-1000,-500,100,0},
+	extra x ticks={30.3,46.3,65.2,79.8},
+	y tick label style={/pgf/number format/1000 sep=},
+	title = Wyniki dla silnika nr 6,
+	]
+	\addplot[gray,semithick] file {SymulationResults/MTVR:25.000000:10.000000:0.000000:400.000000:400.000000:200.000000:200.000000:-200.000000:-200.000000:100.000000/joint-6-result(p)(p).txt};
+	\end{groupplot}
+	\end{tikzpicture}
+	\end{figure}
+\end{document}

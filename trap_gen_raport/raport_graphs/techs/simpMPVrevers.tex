@@ -1,0 +1,94 @@
+% !TeX document-id = {94f9f4ef-72ec-4951-a610-9b7f494f2a41}
+
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{polski}
+\usepackage[pdftex]{graphicx}
+\usepackage{listings}
+\usepackage{amsfonts}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{indentfirst}
+\usepackage{secdot}
+\usepackage[section]{placeins}
+\usepackage[table]{xcolor}
+\usepackage{float}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usetikzlibrary{external}
+\usetikzlibrary{pgfplots.groupplots}
+\pgfplotsset{compat=1.11}
+\textwidth 160mm \textheight 247mm
+\tikzexternalize
+
+\pgfplotsset{width=\figurewidth,compat=1.11}
+\pgfplotsset{
+	tick label style={font=\scriptsize},
+	label style={font=\small},
+	legend style={font=\small},
+	title style={font=\small}
+}
+
+\begin{document}
+
+
+\begin{figure}[tb]
+\tikzsetnextfilename{simpMTVrevers}
+	\begin{tikzpicture}
+			\begin{groupplot}[group style={group size=1 by 3, horizontal sep={1cm},vertical sep={2cm}},
+			width=0.9\textwidth,height=0.3\textwidth]
+			\nextgroupplot
+			[
+			width=0.9\textwidth,
+			xmin=0,xmax=19,ymin=-420,ymax=0,
+			xlabel={$t$},
+			ylabel={$Position$},
+			xtick={0,2.5,5,7.5,10,12.5,15,17,18.5},
+			ytick={-400, -300, -200, -100, 0},
+			extra y ticks={-400},
+			extra x ticks={18.5},
+			extra tick style={grid=major},
+			y tick label style={/pgf/number format/1000 sep=},
+			title = Symulacja generatora,
+			]
+			\addplot[orange,semithick] file {MatlabResults/[VEL]positions:q0:0q1:-400v0:0v1:0vmax:-25amax:-10.txt};
+			
+			\nextgroupplot
+			[
+			width=0.9\textwidth,
+			xmin=0,xmax=19,ymin=-420,ymax=0,
+			xlabel={$t$},
+			ylabel={$Position$},
+			xtick={0,2.5,5,7.5,10,12.5,15,17,18.5},
+			ytick={-400, -300, -200, -100, 0},
+			extra y ticks={-400},
+			extra x ticks={18.5},
+			extra tick style={grid=major},
+			y tick label style={/pgf/number format/1000 sep=},
+			title = Zadane generatora,
+			]
+			\addplot[magenta,semithick] file {SymulationResults/V:25.000000:10.000000:0.000000:-400.000000/joint-1-setpoint.txt};
+			\nextgroupplot
+			[
+			width=0.9\textwidth,
+			xmin=0,xmax=19,ymin=-420,ymax=0,
+			xlabel={$t$},
+			ylabel={$Position$},
+			xtick={0,2.5,5,7.5,10,12.5,15,17,18.5},
+			ytick={-400, -300, -200, -100, 0},
+			extra y ticks={-400},
+			extra x ticks={18.5},
+			extra tick style={grid=major},
+			y tick label style={/pgf/number format/1000 sep=},
+			title = Wyniki symulacji,
+			]
+			\addplot[blue,semithick] file {SymulationResults/V:25.000000:10.000000:0.000000:-400.000000/joint-1-result.txt};
+			\end{groupplot}
+			\end{tikzpicture}
+	\end{figure}
+\end{document}

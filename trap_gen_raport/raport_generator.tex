@@ -260,6 +260,7 @@
 	Każda z~metod przyjmuje dwie flagi \texttt{save\_data} i~\texttt{research\_mode}. Pierwsza z~nich pozwala na zapisanie danych ruchu w~pliku \texttt{IRPOS\_results} w~katalogu domowym. Należy jednak pamiętać, że ze względu na wymagania systemów czasu rzeczywistego, generator alokuje pamięć na wyniki w~trakcie konfiguracji komponentu, a~nie dynamicznie. Przez co może nastąpić niepełny zapis danych przy długim czasie wykonywania rozkazu. Działanie \texttt{research\_mode} jest zależna od tego czy profil prędkościowy jest obliczany w~trybie \texttt{duration}, czy \texttt{velocity}. W~obu przypadkach blokuje on możliwość nadania prędkości początkowej lub końcowej. Jest to wprowadzone by ułatwić pracę przy niepewnych wartościach zadanych. Ponad to komponent akcji nie sprawdza czy trasa nie wykroczyła za bardzo poza granice tolerancji dla . Dodatkowo w~trybie \texttt{velocity} generator ma kolejny warunek: osiągnięcie maksymalnej prędkości. Oznacza to, że jeśli użytkownik chce pokonać pewną odległość, niewystarczającą do rozpędzenia silnika przy zadanym przyśpieszeniu, generator odmówi wykonania zadania. Jest możliwe przemieszczenie silnika przy niższej, ale mijało by się z~celem badania czy jest ona możliwa do osiągnięcia. Pierwszy tryb nie ma zaimplementowanego tego warunku, gdyż przemieszczenie wszystkich silników w~tym samym czasie ogranicza do stopnia silnie utrudniającego wykorzystanie funkcji. Poza tym tryb ten nie jest stworzony do zbadania właściwości kinematycznych robota. 
 	
 	\subsection{Prędkości graniczne}
+	\label{sec:borderVels}
 	Założenia generatora trajektorii trapezoidalnej oraz jego implementacja w~systemie IRPOS zakładają możliwość prędkości początkowej i~końcowej różnej od zera. Niemniej jednak nie zaimplementowano funkcji api, która pozwalała na ich zadanie. Nie jest to potrzebne do zbadania właściwości kinematycznych robota. W~razie potrzeby można rozszerzyć funkcjonalność klasy \texttt{IRPOS\_T} bez zmiany kodu komponentów OROCOS'owych.
 	
 	\subsection{Funkcje pomocnicze}
@@ -532,11 +533,14 @@
 	\par Współczynniki profilu prędkościowego obliczane są na podstawie wzorów z~\hyperref[sec:math]{sekcji 2}. Natomiast obliczanie położenia dla danej chwili następuje przy wywołaniu publicznej funkcji przez klasę główną generatora. Przemnażają one współczynniki przez kolejne potęgi podanej chwili $t$.
 	
 	\section{Testowanie}
-	Testowanie generatora rozpoczęto od sprawdzenia, czy działał on przy najprostszych przykładach. Następnie przetestowano wykrywanie nierealizowanych zadanych. Każda próba została poprzedzona oceną zadanych za pomocą skryptów Matlab'owych. Dla funkcji działających w~przestrzeni stawów dodatkowo sprawdzano czy przeniesienie trajektorii do przestrzeni silników nie spowoduje problemów. Wyniki oceniano na podstawie zebranych danych o~położeniach trajektorii wytworzonej przez generator, ostatecznego wyniku pobranego przez IRPOS-api oraz na podstawie obrazu wizualizacji. Każda z~funkcji przedstawionych w~\hyperref[sec:api]{sekcji 5} została przetestowana oddzielnie.
+	Testowanie generatora rozpoczęto od sprawdzenia, czy działał on przy najprostszych przykładach. Następnie przetestowano wykrywanie nierealizowanych zadanych. Każda próba została poprzedzona oceną zadanych za pomocą skryptów Matlab'owych. Dla funkcji działających w~przestrzeni stawów dodatkowo sprawdzano czy przeniesienie trajektorii do przestrzeni silników nie spowoduje problemów. Wyniki oceniano na podstawie zebranych danych o~położeniach trajektorii wytworzonej przez generator, ostatecznego wyniku pobranego przez IRPOS-api oraz na podstawie obrazu wizualizacji. Każda z~funkcji przedstawionych w~\hyperref[sec:api]{sekcji 5} została przetestowana oddzielnie. Zgodnie z~założeniami przedstawionymi w~\hyperref[sec:borderVels]{sekcji 5.5}, nie testowano nadania prędkości granicznych.
 	\subsection{\texttt{move\_to\_motor\_position\_trapezoid\_velocity}}
 	Testowanie funkcji działającej w~przestrzeni stawów w~trybie prędkościowym.
 	\subsubsection{Proste działanie w~trybie niebadawczym}
-	Początkowo zadano nastawy, które wymuszały ruch tylko jednego silnika. Podane są w~\hyperref[tab:setup1]{tablicy 7}, każdy wiersz reprezentuje oddzielną symulację. Następnie zastosowano te same nastawy, ale tym razem jednocześnie. W~kolejnym kroku przeprowadzono symulację ruchu w~drugą stronę. 
+	\label{sec:MPV}
+	Początkowo zadano nastawy, które wymuszały ruch tylko jednego silnika. Podane są w~\hyperref[tab:setup1]{tablicy 7}, każdy wiersz reprezentuje oddzielną symulację. Następnie zastosowano te same nastawy, ale tym razem jednocześnie. W~kolejnym kroku przeprowadzono symulację ruchu w~drugą stronę. 	
+	\par Ze względu na liczbę symulacji wykresy z~wynikami pierwszych dwóch testów przedstawiono tylko dla jednego silnika. \hyperref[fig:simpMPVall]{Rysunek 6} jest zbiorem wykresów kolejnych stawów, gdy uruchomiono zmianę położeń z~\hyperref[tab:setup1]{tablicy 7} jednocześnie. Widać na nim, że zgodnie z~założeniami trybu prędkościowego każdy staw kończy poruszanie się w~innym momencie.
+	\newpage
 	\begin{table}[H]
 	\centering
 	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
@@ -544,79 +548,22 @@
 	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
 	\hline
 	\hline
-	\hspace{1em}1& 0.0 & 400.0 & 0.0 & 0.0 & 25.0 & 20&\hspace{2em}\checkmark\\ 
+	\hspace{1em}1& 0.0 & 400.0 & 0.0 & 0.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %400.01624549348827
 	\hline
-	\hspace{1em}2& 0.0 & 100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  
+	\hspace{1em}2& 0.0 & 100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %100.06493977550167
 	\hline
-	\hspace{1em}3& 0.0 & 100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ 
+	\hspace{1em}3& 0.0 & 100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %100.05074855824355
 	\hline
-	\hspace{1em}4& 0.0 & 350.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  
+	\hspace{1em}4& 0.0 & 350.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %350.03683107162874
 	\hline
-	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  
+	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %400.0004100112147
 	\hline
-	\hspace{1em}6& 0.0 & 2000.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  
+	\hspace{1em}6& 0.0 & 2000.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %2000.0423718337847
 	\hline
 	\end{tabular}
 	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
 	\label{tab:setup1}
 	\end{table}
-	Ze względu na liczbę symulacji wykresy z~wynikami przedstawiono tylko dla jednego silnika.
-
-	\begin{figure}[H]
-	\begin{tikzpicture}
-	\begin{groupplot}[group style={group size=1 by 3, horizontal sep={1cm},vertical sep={2.1cm}},
-	width=0.9\textwidth,height=0.3\textwidth]
-	\nextgroupplot
-	[
-	width=0.9\textwidth,
-	xmin=0,xmax=19,ymin=0,ymax=420,
-	xlabel={$t$},
-	ylabel={$Position$},
-	xtick={0,2.5,5,7.5,10,12.5,15,17,18.5},
-	ytick={0,100,200,300,400},
-	extra y ticks={400},
-	extra x ticks={18.5},
-	extra tick style={grid=major},
-	y tick label style={/pgf/number format/1000 sep=},
-	title = Symulacja generatora,
-	]
-	\addplot[orange,semithick] file {raport_graphs/[VEL]positions:q_0:0q_1:400v_0:0v_1:0v_max:25a_max:10.txt};
-	
-	\nextgroupplot
-	[
-	width=0.9\textwidth,
-	xmin=0,xmax=19,ymin=0,ymax=420,
-	xlabel={$t$},
-	ylabel={$Position$},
-	xtick={0,2.5,5,7.5,10,12.5,15,17,18.5},
-	ytick={0,100,200,300,400},
-	extra y ticks={400},
-	extra x ticks={18.5},
-	extra tick style={grid=major},
-	y tick label style={/pgf/number format/1000 sep=},	
-	title = Zadane generatora,
-	]
-	\addplot[magenta,semithick] file {raport_graphs/V:25.000000:10.000000:0.000000:400.000000/joint-1-setpoint.txt};
-	\nextgroupplot
-	[
-	width=0.9\textwidth,
-	xmin=0,xmax=19,ymin=0,ymax=420,
-	xlabel={$t$},
-	ylabel={$Position$},
-	xtick={0,2.5,5,7.5,10,12.5,15,17,18.5},
-	ytick={0,100,200,300,400},
-	extra y ticks={400},
-	extra x ticks={18.5},
-	extra tick style={grid=major},
-	y tick label style={/pgf/number format/1000 sep=},
-	title = Wyniki symulacji,
-	]
-	\addplot[blue,semithick] file {raport_graphs/V:25.000000:10.000000:0.000000:400.000000/joint-1-result.txt};
-	\end{groupplot}
-	\end{tikzpicture}
-	\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup1]{tablicy 7}.}
-	\label{fig:simpMTV}
-	\end{figure}
 	
 	\begin{table}[H]
 	\centering
@@ -625,26 +572,222 @@
 	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
 	\hline
 	\hline
-	\hspace{1em}1& 0.0 & -400.0 & 0.0 & 0.0 & 25.0 & 20&\hspace{2em}\checkmark\\ 
+	\hspace{1em}1& 0.0 & -400.0 & 0.0 & 0.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %-400.0162154089848
 	\hline
-	\hspace{1em}2& 0.0 & -100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  
+	\hspace{1em}2& 0.0 & -100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-100.06384704599024
 	\hline
-	\hspace{1em}3& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ 
+	\hspace{1em}3& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-70.04977729182792
 	\hline
-	\hspace{1em}4& 0.0 & -60.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  
+	\hspace{1em}4& 0.0 & -60.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-60.036372838521224
 	\hline
-	\hspace{1em}5& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  
+	\hspace{1em}5& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-70.00005703129563
 	\hline
-	\hspace{1em}6& 0.0 & -900.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  
+	\hspace{1em}6& 0.0 & -900.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-900.0418019049634
 	\hline
 	\end{tabular}
 	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
 	\label{tab:setup2}
 	\end{table}
-	
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.2]{raport_graphs/simpMPV.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup1]{tablicy 7}.}
+		\label{fig:simpMPV}
+	\end{figure}
+
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.2]{raport_graphs/simpMPVrevers.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup1]{tablicy 8}.}
+		\label{fig:simpMPVrevers}
+	\end{figure}
+		
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMPVall.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup1]{tablicy 8}.}
+		\label{fig:simpMPVall}
+	\end{figure}
 		
 		%[-470.0, -110.0, -80.0, -70.0, -80.0, -1000.0]
 		%[450.0, 100.0, 100.0, 380.0, 490.0, 3000.0]
+	\newpage
+	\subsubsection{Proste działanie w~trybie badawczym}
+	\label{sec:MPVR}
+	Porównano wyniki dla z~poprzedniej sekcji, tym razem uruchamiając tryb badawczy. Spodziewano się, że tylko w~przypadku ruchu wstecznego na silniku 4, odległość do przebycia będzie zbyt krótka do osiągnięcia maksymalnej prędkości, ergo odesłana zostanie wiadomość \hyperref[tab:resultcodes]{MAX\_VEL\_UNREACHEABLE}.
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & 400.0 & 0.0 & 0.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %400.0143850928931
+	\hline
+	\hspace{1em}2& 0.0 & 100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %100.06486852560562
+	\hline
+	\hspace{1em}3& 0.0 & 100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %100.04924828213164
+	\hline
+	\hspace{1em}4& 0.0 & 350.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %350.03602449535526
+	\hline
+	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %400.000206395721
+	\hline
+	\hspace{1em}6& 0.0 & 2000.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %2000.0292979453866
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników. Tryb badawczy.}
+	\label{tab:setup3}
+	\end{table}
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & -400.0 & 0.0 & 0.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %-400.0144095369332
+	\hline
+	\hspace{1em}2& 0.0 & -100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-100.06421548964671
+	\hline
+	\hspace{1em}3& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-70.05025772296632
+	\hline
+	\hspace{1em}4& 0.0 & -60.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}X\\  %-8.869543149594518e-13
+	\hline
+	\hspace{1em}5& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-70.00006451911138
+	\hline
+	\hspace{1em}6& 0.0 & -900.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-900.0344946730511
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników. Tryb badawczy.}
+	\label{tab:setup4}
+	\end{table}
+	Wyniki uzyskane dla trybu badawczego w~postaci wykresów (\hyperref[fig:simpMPVR]{rysunek 7},\hyperref[fig:simpMPVRrevers]{rysunek 8},\hyperref[fig:simpMPVRall]{rysunek 9}), są tożsame z wynikami z~\hyperref[sec:MPVR]{sekcji 8.1.1}.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMPVR.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup3]{tablicy 10}. Tryb badawczy.}
+		\label{fig:simpMPVR}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMPVRrevers.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup4]{tablicy 11}. Tryb badawczy.}
+		\label{fig:simpMPVRrevers}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMPVRall.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup3]{tablicy 10}. Tryb badawczy.}
+		\label{fig:simpMPVRall}
+	\end{figure}
+	
+	Jak wspomniano, spodziewano się błędu na silniku 4, przy ruchu $ q_i>q_f$. Takowy otrzymano, co potwierdza \hyperref[fig:res_fail_msg]{rysunek 10} udokumoentowujący go. Warto zaznaczyć, że system numeruje silniki od zera, więc liczba porządkowa jest mniejsza o~jeden.
+	
+	\begin{figure}[H]
+	 	\centering
+	 	\includegraphics[scale=0.635]{raport_pics/res_fail_msg.png}
+	 	\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach dla silnika 4~z~\hyperref[tab:setup4]{tablicy~11}. Tryb badawczy.}
+		\label{fig:res_fail_msg}
+	\end{figure}
+	
+	Otrzymane wykresy są tożsame z~wykresami otrzymanymi w~sekcji \hyperref[sec:MPV]{8.1.1}, co łącząc z~wynikami ruchu odwrotnego silnika 4, pozwala stwierdzić, że tryb badawczy działa zgodnie z~założeniami. 
+
+	\subsection{\texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity}}
+	Testowanie funkcji działającej w~przestrzeni stawów w~trybie prędkościowym, pozwalającej na osiągnięcie kilku kolejnych punktów przy jednym wywołaniu funkcji. 
+	\subsubsection{Proste działanie w~trybie niebadawczym}
+	\label{sec:MTV}
+	Ponownie przeprowadzono najpierw badania trajektorii oddzielnie dla każdego silnika, następnie dla wszystkich naraz. Nie przeprowadzano badań oddzielnie dla ruchu $ q_i>q_f $ ze względu na zawarcie ich w~trajektorii zadanej. Zadane przedstawiono w~\hyperref[tab:setup5]{tablicy 11}. Pominięto w~niej prędkości początkowe i~końcowe, które nie podgalają badaniu.
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{3em}|m{3.5em}|m{3em}|m{3em}|m{3em}|m{4em}|m{3em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_2 $ & $ q_3 $ & $q_4$ & $ q_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & 400.0 & 200.0 & -200.0 & 100.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %-400.0144095369332
+	\hline
+	\hspace{1em}2& 0.0 & -100.0 & 100.0 & 20.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-100.06421548964671
+	\hline
+	\hspace{1em}3& 0.0 & -70.0 & 50.0 & 0.0 & -30.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-70.05025772296632
+	\hline
+	\hspace{1em}4& 0.0 & 350.0 & 100.0 & 200.0 & -50.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-8.869543149594518e-13
+	\hline
+	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 100.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-70.00006451911138
+	\hline
+	\hspace{1em}6& 0.0 & -1000.0 & -500.0 & 100.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-900.0344946730511
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:setup5}
+	\end{table}	
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMTV.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup5]{tablicy 11}.}
+		\label{fig:simpMTV}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMTVall.pdf}
+		\caption{Wyniki testu trajektorii dla wszystkich silników funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup5]{tablicy 11}.}
+		\label{fig:simpMTVall}
+	\end{figure}
+	
+	Jak widać na \hyperref[fig:simpMTVall]{rysunku 12}, silniki "czekają" na siebie. Wizualizują to wypłaszczenia na wykresach. Jest to zgodne z~założeniami generatora. 
+	
+	\subsubsection{Proste działanie w~trybie badawczym}
+	Działanie w~trybie badawczym powinno nie pozwolić na ruch silnika dla nastaw z~\hyperref[tab:setup5]{tablicy 11}, dla silników 2~i~3. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMTVR.pdf}
+		\caption{Wyniki testu trajektorii dla trzeciego silnika funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup5]{tablicy 11}.Tryb badawczy.}		
+		\label{fig:simpMTVR}
+	\end{figure}
+	Rysunek \ref{fig:simpMTVR} pokazuje, różnice pomiędzy trajektorią wygenerowaną w~Matlab'ie, trybem normalnym i~badawczym. Jak się spodziewano tryb badawczy przerwał działanie gdy napotkał problem niemożliwości osiągnięcia maksymalnej prędkości. Jest to zgodne z~założeniami trybu badawczego. Przerwanie pracy następuje nie przed rozpoczęciem całej trajektorii, gdyż zakłada się, że zebranie przynajmniej początkowych danych może być przydatne. Ze względu na alegoryczny wygląd wiadomości błędu do rysunku \ref{fig:res_fail_msg}, pominięto ponowne jego przedstawienie. 
+	 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMTVRall.pdf}
+		\caption{Wyniki testu trajektorii dla wszystkich silników funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:setup5}. Tryb badawczy.}		
+		\label{fig:simpMTVRall}
+	\end{figure}
+	
+	Na wykresie \ref{fig:simpMTVRall}, szczególnie w porównaniu z~\ref{fig:simpMTVall}, widać moment w~którym generator wykrył błąd zadanych na silniku 2. Tabela \ref{tab:setup6} przedstawia wyniki dla oddzielnego badania trajektorii.
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{3em}|m{3.5em}|m{3em}|m{3em}|m{3em}|m{4em}|m{3em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_2 $ & $ q_3 $ & $q_4$ & $ q_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & 400.0 & 200.0 & -200.0 & 100.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %-400.0144095369332
+	\hline
+	\hspace{1em}2& 0.0 & -100.0 & 100.0 & 20.0 & 0.0 & 35.0 & 20&\hspace{2em}X\\ %-100.06421548964671
+	\hline
+	\hspace{1em}3& 0.0 & -70.0 & 50.0 & 0.0 & -30.0 & 35.0 & 20&\hspace{2em}X\\ %-70.05025772296632
+	\hline
+	\hspace{1em}4& 0.0 & 350.0 & 100.0 & 200.0 & -50.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-8.869543149594518e-13
+	\hline
+	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 100.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-70.00006451911138
+	\hline
+	\hspace{1em}6& 0.0 & -1000.0 & -500.0 & 100.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-900.0344946730511
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników. Tryb badawczy.}
+	\label{tab:setup6}
+	\end{table}	
 \newpage	
 \begin{thebibliography}{9}
 \bibitem{ROS} 
