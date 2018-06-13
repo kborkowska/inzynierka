@@ -39,13 +39,13 @@
 	\section{Wstęp}
 	\label{sec:intro}
 	
-	Zaimplementowano generator trajektorii o profilu trapezoidalnym na podstawie równań podanych w~książce \textit{Trajectory Planning for Automatic Machines and Robots} napisanej przez Luigi Biagiotti'ego i~Claudio Melchiorri'ego. Działa on w~dwóch podstawowych trybach: czasowym i prędkościowym, w~zależności od tego, co zadaje użytkownik oraz posiada dodatkowy podtryb badawczy ograniczający dziedzinę pracy generatora.
-	Dwa nowe komponenty zostały połączone z~istniejącą strukturą systemu IRPOS, zarówno poprzez pliki konfiguracyjne jak i~dostęp przez api systemu. System  Do realizacji tego projektu naniesiono zmiany w trzech katalogach systemu: \texttt{irp6\_robot}, \texttt{irp6\_ui}, \texttt{orocos\_controllers}. 
+	W~celu zbadania właściwości kinematycznych robota IRp6 zaimplementowano generator trajektorii o profilu trapezoidalnym na podstawie równań podanych w~książce \textit{Trajectory Planning for Automatic Machines and Robots} napisanej przez Luigi Biagiotti'ego i~Claudio Melchiorri'ego. Działa on w~dwóch podstawowych trybach: czasowym i prędkościowym oraz posiada dodatkowy podtryb badawczy ograniczający dziedzinę pracy generatora.
+	\par Dwa nowe rodzaje komponentów połączono z~istniejącą strukturą systemu IRPOS, zarówno poprzez pliki konfiguracyjne jak i~dostęp przez api systemu. Do realizacji tego projektu naniesiono zmiany w trzech katalogach systemu: \texttt{irp6\_robot}, \texttt{irp6\_ui}, \texttt{orocos\_controllers}. Dodatkowo za pomocą programu Matlab napisano symulacje generatora oraz komponentu przekształcającego nastawy stawów na położenia silników. Dzięki nim można było dopracować warunki przyjęcia żądania ruchu jako poprawnego, tak by jak zmaksymalizować możliwości systemu. Ponad to skrypty Matlab'a przydatne były w~ramach testowania generatora, dzięki nim można było najpierw sprawdzić jak w~pełni powinna wyglądać wygenerowana trajektoria przy zadanych wartościach.
 	
 	\section{Trajektorie o~trapezoidalnym profilu prędkościowym}
 	\label{sec:math}
 	
-	Do realizacji zadania identyfikacji właściwości kinematycznych robota IRp6 postanowiono zaimplementować generator trajektorii trapezoidalnej. Pozwala on na w~prosty sposób zapewnić w~określonych fazach ruchu stałą prędkość, czy przyśpieszenie. \hyperref[fig:trajtrapez]{Rysunek 1} przedstawia przykladową trajektorię trapezoidalną, wygenerowaną za pomocą wzorów wykorzystywanych później do implementacji nowych funkcjonalności w~systemie IRPOS. Współczynniki na podstawie których obliczana jest w~danym momencie pozycja i/lub jej pochodne, wyprowadzone zostały na podstawie wzorów podanych w~książce \textit{Trajectory Planning for Automatic Machines and Robots} napisanej przez Luigi Biagiotti'ego i~Claudio Melchiorri'ego. Dodatkowo za pomocą programu Matlab napisano symulacje generatora oraz komponentu przekształcającego nastawy stawów na położenia silników. Dzięki nim można było dopracować warunki przyjęcia żądania ruchu jako poprawnego, tak by jak zmaksymalizować możliwości systemu. Ponad to skrypty Matlab'a przydatne były w~ramach testowania generatora, dzięki nim można było najpierw sprawdzić jak w~pełni powinna wyglądać wygenerowana trajektoria przy zadanych wartościach.
+	By zidentyfikować właściwości kinematycznyche robota IRp6 postanowiono zaimplementować generator trajektorii trapezoidalnej. Pozwala on na w~prosty sposób zapewnić w~określonych fazach ruchu stałą prędkość, czy przyśpieszenie. Rysunek \ref{fig:trajtrapez}~przedstawia przykladową trajektorię trapezoidalną, wygenerowaną za pomocą wzorów wykorzystanych do implementacji nowych funkcjonalności w~systemie IRPOS. Współczynniki na podstawie których obliczana jest w~danym momencie pozycja i/lub jej pochodne, wyprowadzone zostały na podstawie wzorów podanych w~książce \textit{Trajectory Planning for Automatic Machines and Robots} napisanej przez Luigi Biagiotti'ego i~Claudio Melchiorri'ego.
 	\begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
@@ -86,10 +86,10 @@
 	\addplot[blue,semithick] file {raport_graphs/accelerations.txt};
 	\end{groupplot}
 	\end{tikzpicture}
-	\caption{Wykresy przedstawiające przykładową trajektorię trapezoidalną}
+	\caption{Wykresy przedstawiające przykładową trajektorię trapezoidalną oraz jej pochodne.}
 	\label{fig:trajtrapez}
 	\end{figure}
-	\par Na \hyperref[fig:trajtrapez]{rysunku 1} fazy można jasno rozróżnić patrząc na wykresy prędkości i~przyśpieszenia, które mają mocno wyodrębnione momenty zmiany przyśpieszenia. Kolejno są one opisane współczynnikami:
+	\par Na rysunku \ref{fig:trajtrapez} fazy można jasno rozróżnić patrząc na wykresy prędkości i~przyśpieszenia, które mają mocno wyodrębnione momenty zmiany przyśpieszenia. Kolejno są one opisane współczynnikami:
 	\begin{enumerate}
 	\item \textbf{Faza przyśpieszania} (acceleration phase):
 		\begin{equation}
@@ -134,7 +134,7 @@
 	\end{enumerate}
 	{\footnotesize Gdzie $ q_i $-położenie początkowe, $ q_f $-położenie końcowe, $ v_i $-prędkość początkowa, $ v_f $-prędkość końcowa, $ v_{max} $-prędkość maksymalna (ew. osiągana w~fazie zerowego przyśpieszenia), $ t_i $-chwila początkowa, $ T $-czas trwania trajektorii, $ T_a $-czas trwania fazy przyśpieszania, $ T_d $-czas trwania fazy zwalniania.}
 	\vspace{10px}
-	\par Odgórnie generator ma zawsze określone momenty, prędkości i~położenia graniczne. Czasy trwania faz są obliczane dla każdej trajektorii w~następujący sposób:
+	\par A~priori generator ma zawsze określone momenty, prędkości i~położenia graniczne. Czasy trwania faz są obliczane dla każdej trajektorii w~następujący sposób:
 	\begin{equation}
 	\label{eq:ta1}
 	T_a = \frac{v_{max}-v_i}{a_{max}}
@@ -143,7 +143,7 @@
 	\label{eq:td1}
 	T_d = \frac{v_{max}-v_f}{a_{max}}.
 	\end{equation}
-	Opcjonalnie do generatora podany może zostać czas trwania trajektorii i~przyśpieszenie maksymalne lub prędkość maksymalna i~przyśpieszenie maksymalne. W~pierwszym przypadku prędkość fazy zerowego przyśpieszenia obliczana jest za pomocą:
+	Opcjonalnie do generatora podany może zostać czas trwania trajektorii lub prędkość maksymalna z~przyśpieszeniem maksymalnym. W~pierwszym przypadku prędkość fazy zerowego przyśpieszenia obliczana jest za pomocą:
 	\begin{equation}
 	\label{eq:vmax1}
 	v_{max}=\frac{1}{2}(v_i+v_f+a_{max}T-\sqrt{{a_{max}}^2T^2-4a_{max}h+2a_{max}(v_i+v_f)T-(v_i-v_f)^2})
@@ -160,7 +160,7 @@
 	\label{eq:vmaxlim}
 	ha_{max}\leq\sqrt{v_{lim}-\frac{v_i^2+v_f^2}{2}}.
 	\end{equation}
-	Jeśli pomimo tego wszystkie warunki poprawności zadania są spełnione, trajektoria składa się tylko z~fazy przyśpieszania i~zwalniania. Prędkość do jakiej generator będzie dążyć zmienia się na:
+	Jeśli pomimo tego wszystkie warunki poprawności zadania są spełnione, trajektoria składa się tylko z~fazy przyśpieszania i~zwalniania. Prędkość do jakiej generator będzie dążyć równa się:
 	\begin{equation}
 	\label{eq:vlim}
 	v_{lim}=\sqrt{ha_{max}+\frac{v_i^2+v_f^2}{2}}.
@@ -178,23 +178,23 @@
 	\label{eq:t2}
 	T = T_a+T_d.
 	\end{equation}
-	\par Zmiany jakie następują przy "cofaniu" ($q_i>q_f$) to przemnożenie przyśpieszenia, prędkości oraz odległości. Następuje to po obliczeniu prędkości w~przypadku zadanego czasu trwania ruchu lub od razu w~drugim przypadku.
+	\par Zmiany jakie następują przy \textquotedblleft cofaniu\textquotedblright ($q_i>q_f$) to przemnożenie przyśpieszenia, prędkości oraz odległości przez $-1$. Następuje to po obliczeniu prędkości w~przypadku zadanego czasu trwania ruchu lub od razu w~gdzy zadawana jest prędkość maksymalna. 
 	
 	\section{Krótki opis nowych modułów}
 	\label{sec:shortMod}
 	
-	W~celu ułatwienia zapoznania się ze zmianami wprowadzonymi do IRPOS'a, najpierw pokrótce przedstawione zostaną najważniejsze nowe elementy, przed opisem ich budowy i~zmianami wprowadzonymi do ich akomodacji.
+	W~celu ułatwienia zapoznania się ze zmianami wprowadzonymi do IRPOS'a, przed opisem ich budowy i~zmianami wprowadzonymi do ich akomodacji, najpierw pokrótce przedstawione zostaną najważniejsze nowe elementy.
 	\par 
 	Do systemu wprowadzono cztery nowe komponenty oraz dwa pakiety do obsługi komunikacji, kolejno: 
 		\begin{itemize}
 		\item \texttt{Irp6pmTrapezoidTrajectoryGeneratorJoint}, generator trajektorii trapezoidalnej pracujący w~przestrzeni stawów;
-		\item \texttt{Irp6pmTrapezoidTrajectoryActionJoint}, komponent akcji, stanowiący interfejs pomiędzy generatorem, a IRPOS-api, rozumianym jako transformację wiadomości do odpowiednich formatów; wstępnie sprawdza poprawność zadanych wartości oraz ostateczny wynik ruchu;  
+		\item \texttt{Irp6pmTrapezoidTrajectoryActionJoint}, komponent akcji, stanowiący interfejs pomiędzy generatorem \texttt{Irp6pmTrapezoidTrajectoryGeneratorJoint}, a IRPOS-api, (transformuje wiadomości do odpowiednich formatów i~przesyła je między komponentami), sprawdza poprawność zadanych wartości, utrzymanie tolerancji błędu w~trakcie ruchu oraz różnice między zadanym celem, a~ostateczną konfiguracją robota;  
 		\item \texttt{Irp6pmTrapezoidTrajectoryGeneratorMotor}, generator trajektorii trapezoidalnej pracujący w~przestrzeni silników, jako że stawy robota są sprzężone efekt działania tych dwóch generatorów nie jest równoważny, nawet jeśli weźmie się pod uwagę różnicę w~rzędach wielkości zadanych;
 		\item \texttt{Irp6pmTrapezoidTrajectoryActionMotor}, komponent akcji pracujący z~generatorem przestrzeni silników; 
-		\item \texttt{trapezoidal\_trajectory\_msgs}, zbiór wiadomości stworzonych do pracy z~IRPOS'em. Składa się on ze zgłoszenia typu \textquotedblleft akcja \textquotedblright do komunikacji z~IRPOS-api oraz \textquotedblleft typowych \textquotedblright wiadomości ROS'owych, które przenoszą informację między komponentami, ewentualnie stanowią część wiadomości akcji;
+		\item \texttt{trapezoidal\_trajectory\_msgs}, zbiór wiadomości stworzonych do pracy z~IRPOS'em; składa się ze zgłoszenia typu \textquotedblleft akcja \textquotedblright do komunikacji z~IRPOS-api oraz \textquotedblleft typowych \textquotedblright wiadomości ROS'owych, które przenoszą informację między komponentami, ewentualnie stanowią część wiadomości \textquotedblleft akcji\textquotedblright;
 		\item \texttt{rtt\_trapezoidal\_trajectory\_msgs}, pakiet umożliwiający prace \linebreak \texttt{trapezoidal\_trajectory\_msgs} w~czasie rzeczywistym.
 		\end{itemize}
-	Komponenty akcji i~generatorów działają na podstawie tego samego kodu źródłowego, niezależnie od przestrzeni ruchu. 
+	Komponenty akcji i~generatorów przestrzeni stawów i~silników działają na podstawie tego samego kodu źródłowego. 
 	\section{Uruchamianie systemu w~trybie nohardware}
 	\label{sec:boot}
 	
@@ -215,7 +215,7 @@
 	Ostatnią fazą uruchamiania jest analiza OROCOS'owego skryptu \texttt{irp6-p-inside.ops}.\linebreak W~nim komponenty są ładowane, nadaje im się parametry z~serwera parametrów, oraz wywoływana jest funkcja konfiguracyjna. Ponadto, komponenty akcji mają określane priorytet i~okres wywoływania. Dla nowych komponentów nadano te same wartości, które były ustawione w~systemie dla ich spline'owych odpowiedników (komponenty action mają okres 0.01 sek, priorytet 2). W~przypadku generatorów nie następuje bezpośrednie ustawienie częstotliwości, ani priorytetu. Są one łączone z~komponentem \texttt{Irp6pScheme}, który jest instancją narzędzia \texttt{conman::Scheme}. Naklada ono dodatkowe ograniczenia usprawniające pracę komponentów oraz zmniejsza prawdopodobieństwo wystąpienie błędu. Plik \texttt{irp6-p-inside.ops} zawiera też informacje o~połączeniach portowych pomiędzy komponentami. Generatory łączy się z~komponentami akcji oraz modułami odbierającymi zadane położenie i~publikującymi obecne ustawienia robota. Przesyłanie wiadomości typu \textquotedblleft akcja\textquotedblright pomiędzy komponentami akcji, a IRPOS-api zapewnia połączenie np. \texttt{Irp6pmTrapezoidTrajectoryActionJoint} poprzez serwis \texttt{actionlib}.
 	Modułowi jest nadawana unikatowa nazwa w~tym kontekście, znana programiście api tak by mógł on za jej pomocą skonfigurować ze swojej strony klienta. Na koniec komponenty akcji są stratowane razem ze starymi elementami systemu, a~generatory pozostają nieaktywne do momentu ich uruchomienia przez api. W~ten sposób tylko jeden komponent nadaje regulatorom wartości zadane.
 	
-	\section{Korzystanie z~IRPOS-api}
+	\section{Nowe funkcje systemu IRPOS}
 	\label{sec:api}
 	Do IRPOS-api wprowadzono osiem nowych funkcji, które jawnie może wywoływać użytkownik:
 	\begin{itemize}
@@ -244,36 +244,38 @@
 	
 	\subsection{Różnice pomiędzy metodami \texttt{motor} i~\texttt{joint}}
 	\label{sec:motjodiff}
-	Metody \texttt{motor} i~\texttt{joint} pozwalają na wykonanie zadań odpowiednio w~przestrzeni silników lub stawów. Z~perspektywy implementacji różnią się one  między sobą tylko wyboram inego klienta, przez co innych komponentów obliczjących zadane, i~wysłaniem wartości tolerancji pozycji właściwych danej przestrzeni pracy. Jakoże, pomimo możliwości osiągnięcia przez staw konkretnego położenia, może on konfliktować z~ustawieniami silników, przed testowaniem funkcji \texttt{joint} wpierw sprawdzano czy pożądana konfiguracja robota nie powoduje naruszenia granic położenia silników. Dokonano tego za pomocą skryptów programu Matlab, które symulowały zachowanie generatorów i~ułożenie silników. Warto też wspomnieć, że na poziomie komponentów OROCOS'owych nie ma różnic między kodem użytym do pracy w~tych przestrzeniach. 
+	Metody \texttt{motor} i~\texttt{joint} pozwalają na wykonanie zadań odpowiednio w~przestrzeni silników lub stawów. Z~perspektywy implementacji api różnią się one  między sobą tylko wyboram inego klienta, przez co innych komponentów obliczjących zadane, i~wysłaniem wartości tolerancji pozycji właściwych danej przestrzeni pracy. Jakoże, pomimo możliwości osiągnięcia przez staw konkretnego położenia, może on konfliktować z~ustawieniami silników, więc przed testowaniem funkcji \texttt{joint} wpierw sprawdzano czy pożądana konfiguracja robota nie powoduje naruszenia granic położenia silników. Dokonano tego za pomocą skryptów programu Matlab, które symulowały zachowanie generatorów i~ułożenie silników. Warto też wspomnieć, że na poziomie komponentów OROCOS'owych nie ma różnic między kodem użytym do pracy w~tych przestrzeniach. 
 	
-	\subsection{Różnice pomiędzy metodami \texttt{move\_to\_*\_position} i~\texttt{move\_along\_*\_trajectory}}
+	\subsection{Różnice pomiędzy metodami \texttt{move\_to\_*\_position}
+	\linebreak i~\texttt{move\_along\_*\_trajectory}}
+	 
 	\label{sec:postradiff}
 	IRPOS-api pozwala na zadanie zarówno pojedynczego punktu lub kilku kolejnych do osiągnięcia. Dla użytkownika najważniejszą różnicą jest sposób przekazywania celu. Funkcje \linebreak \texttt{move\_to\_*\_position} przyjmują jako pierwszy argument jednowymiarową tablicę, pojedynczy cel, a~\texttt{move\_along\_*\_trajectory} wektor wiadomości typu \texttt{JointTrajectoryPoint}, czyli cały ich zbiór. 
-	\par Sprawdzanie poprawności zadanych jest normalnie podzielone na dwie części, obsługiwaną w~komponencie akcji i~tą obliczaną przez generator. Będzie to szerzej opisane w~sekcji TODO. Tu należy jedynie wspomnieć, że przekroczenie limitów pozycji zawsze zostanie wykryte przed jakimkolwiek ruchem, natomiast wystąpienie innych błędów sprawdzane jest przy obliczany profili prędkościowych. Efektywnie oznacza to, że przy użyciu funkcji typu \texttt{move\_along\_*\_trajectory} może wystąpić sytuacja w~której robot poruszy się do pierwszego z~punktów i~dopiero wtedy wykryte zostanie naruszenie warunków generatora.
+	\par Sprawdzanie poprawności zadanych jest normalnie podzielone na dwie części, obsługiwaną w~komponencie akcji i~tą obliczaną przez generator. Wszystkie sprawdzane przypadki i~ich kody błędów opisane są w~tablicy \ref{tab:resultcodes}. Tu należy jedynie wspomnieć, że przekroczenie limitów pozycji zawsze zostanie wykryte przed ruchem do kolejnego punktu, natomiast wystąpienie innych błędów sprawdzane jest przy obliczany profili prędkościowych. Efektywnie oznacza to, że przy użyciu funkcji typu \texttt{move\_along\_*\_trajectory} może wystąpić sytuacja w~której robot poruszy się do jednego z~pierwszych punktów i~dopiero wtedy wykryte zostanie naruszenie warunków generatora.
 	
 	\subsection{Metody \texttt{velocity} i~\texttt{duration}} 
 	\label{sec:veldurdiff}
-	Wybór pomiędzy funkcjami \texttt{velocity}, a~\texttt{duration} polega na określeniu celu ruchu. Metody \texttt{velocity} opierają obliczanie profili prędkościowych na podstawie zadanych: położenia oraz maksymalnych prędkości i~przyśpieszenia. Można za ich pomocą identyfikować właściwości kinematyczne robota lub zachować większą kontrolę nad właściwościami ruchu. Nie pozwalają one jednak na zachowanie jednolitego czasu trwania ruchu na wszystkich silnikach. Wygodniejsze są metody \texttt{duration}. Zadaje się im tylko punkty do osiągnięcia, a generator sam oblicz jaki czas zajmie mu ruch na podstawie predefiniowanych parametrów. Docelowo będą to wartości zbadane podczas testów na robocie, zapewniając optymalny czas pracy. \texttt{IRPOS\_T}, przy wysyłaniu zadanych do komponentów akcji, ustawia flagę \texttt{duration\_mode}. Ustawiona na wartość \textquotedblleft false\textquotedblright indykuje tryb prędkościowy. Dokładny sposób oraz konsekwencje działania tych dwóch trybów są opisane w~sekcjach TODO oraz TODO2 dla funkcji \texttt{velocity} i~\texttt{duration} kolejno. 
+	Wybór pomiędzy funkcjami \texttt{velocity}, a~\texttt{duration} polega na określeniu celu ruchu. Metody \texttt{velocity} opierają obliczanie profili prędkościowych na podstawie zadanych: położenia oraz maksymalnych prędkości i~przyśpieszenia. Można za ich pomocą identyfikować właściwości kinematyczne robota lub zachować większą kontrolę nad właściwościami ruchu. Nie pozwalają one jednak na zachowanie jednolitego czasu trwania ruchu na wszystkich silnikach. Wygodniejsze są metody \texttt{duration}. Zadaje się im tylko punkty do osiągnięcia, a generator sam oblicz jaki czas zajmie mu ruch na podstawie predefiniowanych parametrów. Docelowo będą to wartości zbadane podczas testów na robocie, zapewniając optymalny czas pracy. \texttt{IRPOS\_T}, przy wysyłaniu zadanych do komponentów akcji, ustawia flagę \texttt{duration\_mode}. Ustawiona na wartość \textquotedblleft false\textquotedblright indykuje tryb prędkościowy. Dokładny sposób oraz konsekwencje działania tych dwóch trybów są opisane w~sekcji \ref{sec:trajgen}. 
 	
 	\subsection{Flagi}
 	\label{sec:flags}
-	Każda z~metod przyjmuje dwie flagi \texttt{save\_data} i~\texttt{research\_mode}. Pierwsza z~nich pozwala na zapisanie danych ruchu w~pliku \texttt{IRPOS\_results} w~katalogu domowym. Należy jednak pamiętać, że ze względu na wymagania systemów czasu rzeczywistego, generator alokuje pamięć na wyniki w~trakcie konfiguracji komponentu, a~nie dynamicznie. Przez co może nastąpić niepełny zapis danych przy długim czasie wykonywania rozkazu. Działanie \texttt{research\_mode} jest zależna od tego czy profil prędkościowy jest obliczany w~trybie \texttt{duration}, czy \texttt{velocity}. W~obu przypadkach blokuje on możliwość nadania prędkości początkowej lub końcowej. Jest to wprowadzone by ułatwić pracę przy niepewnych wartościach zadanych. Ponad to komponent akcji nie sprawdza czy trasa nie wykroczyła za bardzo poza granice tolerancji dla . Dodatkowo w~trybie \texttt{velocity} generator ma kolejny warunek: osiągnięcie maksymalnej prędkości. Oznacza to, że jeśli użytkownik chce pokonać pewną odległość, niewystarczającą do rozpędzenia silnika przy zadanym przyśpieszeniu, generator odmówi wykonania zadania. Jest możliwe przemieszczenie silnika przy niższej, ale mijało by się z~celem badania czy jest ona możliwa do osiągnięcia. Pierwszy tryb nie ma zaimplementowanego tego warunku, gdyż przemieszczenie wszystkich silników w~tym samym czasie ogranicza do stopnia silnie utrudniającego wykorzystanie funkcji. Poza tym tryb ten nie jest stworzony do zbadania właściwości kinematycznych robota. 
+	Każda z~metod przyjmuje dwie flagi \texttt{save\_data} i~\texttt{research\_mode}. Pierwsza z~nich pozwala na zapisanie danych ruchu w~pliku \texttt{IRPOS\_results} w~katalogu domowym. Należy jednak pamiętać, że ze względu na wymagania systemów czasu rzeczywistego, generator alokuje pamięć na wyniki w~trakcie konfiguracji komponentu, a~nie dynamicznie. Przez co może nastąpić niepełny zapis danych przy długim czasie wykonywania rozkazu. Działanie \texttt{research\_mode} jest zależna od tego czy profil prędkościowy jest obliczany w~trybie \texttt{duration}, czy \texttt{velocity}. W~obu przypadkach blokuje on możliwość nadania prędkości początkowej i~końcowej. Jest to wprowadzone by ułatwić pracę przy niepewnych wartościach zadanych. Komponent akcji nie sprawdza czy trasa nie wykroczyła za bardzo poza granice tolerancji w~trybie badawczym. Dodatkowo w~trybie \texttt{velocity} generator ma kolejny warunek: osiągnięcie maksymalnej prędkości. Oznacza to, że jeśli użytkownik chce pokonać pewną odległość, niewystarczającą do rozpędzenia silnika przy zadanym przyśpieszeniu, generator odmówi wykonania zadania. Przemieszczenie silnika/stawu przy niższej prędkości jest możliwe, ale mijało by się z~celem trybu badawczego. Tryb czasowy nie ma zaimplementowanego tego warunku, gdyż przemieszczenie wszystkich silników/stawów w~tym samym czasie i~osiągnięcie na każdym z~nich prędkości maksymalnej jednocześnie, silnie utrudnia wykorzystanie funkcji. Poza tym tryb ten nie jest stworzony do zbadania właściwości kinematycznych robota. 
 	
 	\subsection{Prędkości graniczne}
 	\label{sec:borderVels}
-	Założenia generatora trajektorii trapezoidalnej oraz jego implementacja w~systemie IRPOS zakładają możliwość prędkości początkowej i~końcowej różnej od zera. Niemniej jednak nie zaimplementowano funkcji api, która pozwalała na ich zadanie. Nie jest to potrzebne do zbadania właściwości kinematycznych robota. W~razie potrzeby można rozszerzyć funkcjonalność klasy \texttt{IRPOS\_T} bez zmiany kodu komponentów OROCOS'owych.
+	Założenia generatora trajektorii trapezoidalnej oraz jego implementacja w~systemie IRPOS pozwalają na zadanie prędkości początkowej i~końcowej różnej od zera. Niemniej jednak nie zaimplementowano funkcji api, która pozwalała na ich zadanie. Nie jest to potrzebne do zbadania właściwości kinematycznych robota. W~razie potrzeby można rozszerzyć funkcjonalność klasy \texttt{IRPOS\_T} bez zmiany kodu komponentów OROCOS'owych.
 	
 	\subsection{Funkcje pomocnicze}
 	\label{sec:auxilary}
 	Metoda \texttt{trapezoid\_error\_code\_to\_string} zamienia otrzymany kod wiadomości zwrotnej od komponentu akcji na jej słowny odpowiednik. Umożliwia to poinformowanie użytkownika w~czytelny sposób o wyniku wywołanej funkcji.
-	Translacja jest zgodna z~kodem zapisanym w~wiadomości \texttt{TrapezoidGeneratorResult}, opisanej w~sekcji TODO. Rysunek 1 przedstawia informacje jakie otrzymał użytkownik po wywołaniu dwa razy funkcji 
-	\linebreak
+	Translacja jest zgodna z~kodem zapisanym w~wiadomości \texttt{TrapezoidGeneratorResult}, opisanych w~tablicy \ref{tab:resultcodes}. Rysunek \ref{fig:msg_eg} przedstawia informacje jakie otrzymał użytkownik po wywołaniu dwa razy funkcji 
+	\linebreakig
 	\texttt{move\_along\_joint\_trajectory\_trapezoid\_velocity}. Za drugim razem zmieniono flagę \linebreak \texttt{research\_mode} na \textquotedblleft True\textquotedblright, co spowodowało przedwczesne zakończenie pracy i~wystosowanie odpowiedniej wiadomości błędu.
 	\begin{figure}[t]
 	\centering
 	\includegraphics[width=0.8\textwidth]{raport_pics/msgs_from_gen.png}
 	\caption{Wiadomości zwrotne otrzymane przy pracy z nowymi funkcjami systemu IRPOS, w~tym jedną z~informacjami o~błędzie i~jego parametrach.}
-	\label{}
+	\label{fig:msg_eg}
 	\end{figure}
 	
 	\section{Wiadomości typu \texttt{Trapezoid}}
@@ -285,9 +287,9 @@
 	\item \texttt{TrapezoidGeneratorResult.msg}
 	\end{itemize}
 	Pierwsza jest używana do komunikacji z~IRPOS-api, pozostałe są stosowana w~głębszych warstwach systemu. 
-	\subsubsection{\texttt{TrapezoidTrajectory.action}}
+	\subsection{\texttt{TrapezoidTrajectory.action}}
 	\label{sec:msgsact}
-	Jak każda wiadomość opierająca się na tzw. \textquotedblleft ROS action protocol\textquotedblright, stworzonym do działania z~wywłaszczanymi zadaniami\cite{ROS}, \texttt{TrapezoidTrajectory.action} dzieli się na trzy części, w~pliku definiującym przedzielone trzema poziomymi kreskami (\textquotedblleft - - -\textquotedblright), które opisuje \hyperref[tab:action]{tablica~1}. Natomiast wszystkie parametry i~ich deskrypcje znajdują się w~\hyperref[tab:actionparams]{tablicy~2}.
+	Jak każda wiadomość opierająca się na tzw. \textquotedblleft ROS action protocol\textquotedblright, stworzonym do działania z~wywłaszczanymi zadaniami\cite{ROS}, \texttt{TrapezoidTrajectory.action} dzieli się na trzy części, w~pliku definiującym przedzielone trzema poziomymi kreskami (\textquotedblleft - - -\textquotedblright), które opisuje tabela  \ref{tab:action}. Natomiast wszystkie parametry i~ich deskrypcje znajdują się w~tabeli \ref{tab:actionparams}.
 	
 
 	\begin{table}[H]
@@ -302,7 +304,7 @@
 	 \hline
 	 Result & komponent akcji $\rightarrow$ IRPOS-api & wynik wykonanych operacji przesyłany  po zakończeniu ruchu \\
 	 \hline
-	 Feedback & komponent akcji $\rightarrow$ IRPOS-api  & cyklicznie przesyłane wiadomości o~pośrednich wynikach \\
+	 Feedback & komponent akcji $\rightarrow$ IRPOS-api  & cyklicznie przesyłane wiadomości o~postępach ruchu \\
 	 \hline
 	\end{tabular}
 	\caption{Opis części wiadomości typu\textquotedblleft action\textquotedblright}
@@ -316,31 +318,31 @@
 	nazwa części & nazwa & typ danych & opis\\
 	\hline
 	\hline
-	Goal & trajectory & trajectory\_msgs/ JointTrajectory\cite{jtm} & zadana trajektoria (punkty, prędkości i przyśpieszenia końcowe, itp.) \\  
+	Goal & trajectory & trajectory\_msgs/ JointTrajectory & zadana trajektoria (punkty, prędkości i przyśpieszenia końcowe, itp.) \\  
 	\cline{2-4}
-	& path\_tolerance & control\_msgs/ JointTolerance[]\cite{cmjtm}&tolerancja błędu definiowana dla każdego silnika.\\
+	& path\_tolerance & control\_msgs/ JointTolerance[]&tolerancja błędu definiowana dla każdego silnika.\\
 	\cline{2-4}
-	& research\_mode & bool & flaga trybu badawczego, patrz \hyperref[sec:flags]{3.2.4}\\
+	& research\_mode & bool & flaga trybu badawczego, patrz \ref{sec:flags}\\
 	\cline{2-4}
-	& duration\_mode & bool & flaga trybu \texttt{duration}, patrz \hyperref[sec:veldurdiff]{3.2.3}\\
+	& duration\_mode & bool & flaga trybu \texttt{duration}, patrz \ref{sec:veldurdiff}\\
 	\cline{2-4}
-	& save\_data & bool & flaga zapisu danych, patrz \hyperref[sec:flags]{3.2.4}\\
+	& save\_data & bool & flaga zapisu danych, patrz \ref{sec:flags}\\
 	\cline{2-4}
-	& max\_velocities & float64[] & prędkości do osiągnięcia przez silniki, działa tylko w trybie \texttt{velocity}, patrz \hyperref[sec:veldurdiff]{3.2.3}\\
+	& max\_velocities & float64[] & prędkości maksymalne, działa tylko w trybie \texttt{velocity}, patrz \ref{sec:veldurdiff}\\
 	\cline{2-4}
-	& max\_accelerations & float64[] & przyśpieszenia do osiągnięcia przez silniki, działa tylko w trybie \texttt{velocity}, patrz \hyperref[sec:veldurdiff]{3.2.3}\\
+	& max\_accelerations & float64[] & przyśpieszenia maksymalne, działa tylko w trybie \texttt{velocity}, patrz \ref{sec:veldurdiff}\\
 	\hline
-	Result & result & TrapezoidGeneratorResult & wiadomość tożsama z~tą którą zwraca komponentowi akcji generator, stąd postanowiono użyć jej bezpośrednio; pełna definicja patrz \hyperref[sec:msgsresult]{3.3.3}\\
+	Result & result & TrapezoidGeneratorResult & wiadomość tożsama z~tą którą zwraca komponentowi akcji generator, stąd postanowiono użyć jej bezpośrednio; pełna definicja: \ref{sec:msgsresult}\\
 	\hline
 	Feedback & header & Header & nagłówek\\
 	\cline{2-4}
 	& joint\_names & string[] & używane nazwy silników/stawów\\
 	\cline{2-4}
-	& desired & trajectory\_msgs/ JointTrajectoryPoint\cite{jtpm} & punkt zadany przez generator\\
+	& desired & trajectory\_msgs/ JointTrajectoryPoint & punkt zadany przez generator\\
 	\cline{2-4}
-	& actual & trajectory\_msgs/ JointTrajectoryPoint\cite{jtpm} & punkt osiągnięty przez robota\\
+	& actual & trajectory\_msgs/ JointTrajectoryPoint & punkt osiągnięty przez robota\\
 	\cline{2-4}
-	& error & trajectory\_msgs/ JointTrajectoryPoint\cite{jtpm} & błąd regulacji\\
+	& error & trajectory\_msgs/ JointTrajectoryPoint & błąd regulacji\\
 	\hline
 	\end{tabular}
 	\caption{Dokładny opis wszystkich zmiennych używanych w~wiadomości \texttt{TrapezoidTrajectory.action}}
@@ -348,10 +350,10 @@
 	
 	\subsection{\texttt{TrapezoidGeneratorGoal.msg}}
 	\label{sec:msgsgoal}
-	\texttt{TrapezoidGeneratorGoal.msg} jest zwykłą wiadomością ROS'ową, która przesyłana jest od komponentu akcji do generatora. Jest ona tożsama z~częścią Goal przedstawionej w~\hyperref[tab:actionparams]{tablicy~2}. Rozdzielenie jest pozostałością po wersji, w~której istniało dużo różnić między tymi elementami. 
+	\texttt{TrapezoidGeneratorGoal.msg} jest zwykłą wiadomością ROS'ową, która przesyłana jest od komponentu akcji do generatora. Jest ona tożsama z~częścią Goal przedstawionej w~tabeli \ref{tab:actionparams}. Rozdzielenie jest pozostałością po wersji, w~której istniało dużo różnić między tymi elementami. 
 	\subsection{\texttt{TrapezoidGeneratorResult.msg}}
 	\label{sec:msgsresult}
-	Wynik ruchu jest sygnalizowany komponentowi akcji przez generator poprzez wysłanie wiadomości typu \texttt{TrapezoidGeneratorResult.msg}. Składa się ona z~ciągu znaków, który jest wypełniony jeśli nastąpił błąd w~trakcie obliczania profilu prędkościowego oraz kodu zwrotnego, którego znaczenie jest zdefiniowane w~tym samym pliku. Pisemna wiadomość została stworzona po to by łatwiej było dobrać nastawy, które będą znajdować się w~przestrzeni mozliwości generatora trapezoidalnego. \hyperref[tab:resultparams]{Tabelica~3} zawiera opis parametrów \texttt{TrapezoidGeneratorResult}, a~\hyperref[tab:resultcodes]{tabelica~4} opis możliwych kodów. Warto wspomnieć, że pierwsze sześć kodów pokrywa się z~używanymi przy generowaniu trajektorii spline'owych. Część \texttt{error\_string} nie występuje wiadomościach stosowanych przez stary generator.
+	Wynik ruchu jest sygnalizowany komponentowi akcji przez generator poprzez wysłanie wiadomości typu \texttt{TrapezoidGeneratorResult.msg}. Składa się ona z~ciągu znaków, który jest wypełniony jeśli nastąpił błąd w~trakcie obliczania profilu prędkościowego oraz kodu zwrotnego, którego znaczenie jest zdefiniowane w~tym samym pliku. Pisemna wiadomość została stworzona po to by łatwiej było dobrać nastawy, które będą znajdować się w~przestrzeni mozliwości generatora trapezoidalnego. Tabela \ref{tab:resultparams} zawiera opis parametrów \texttt{TrapezoidGeneratorResult}, a~tabela \ref{tab:resultcodes} opis możliwych kodów. Warto wspomnieć, że pierwsze sześć kodów pokrywa się z~używanymi przy generowaniu trajektorii spline'owych. Część \texttt{error\_string} nie występuje wiadomościach stosowanych przez stary generator.
 	
 	\begin{table}[H]
 	\label{tab:resultparams}
@@ -374,7 +376,7 @@
 	\centering
 	\begin{tabular}{|m{2em}|m{17 em}|m{18em}|}
 	\hline
-	kod & nazwa & opis\\
+	kod & nazwa & znaczenie\\
 	\hline
 	\hline
 	0 & SUCCESSFUL & robot osiągnął pożądany cel \\  
@@ -395,7 +397,7 @@
 	\hline
 	-8 & CANT\_CALCULATE\_COEFFS & błąd wystąpił przy obliczaniu współczynników profilu prędkościowego\\
 	\hline
-	-9 & MAX\_VEL\_UNREACHEABLE & w~przypadku zadanych warunków niemożliwe jest osiągnięcie maksymalnej prędkości, patrz \hyperref[sec:flags]{3.2.4}\\
+	-9 & MAX\_VEL\_UNREACHEABLE & w~przypadku zadanych warunków niemożliwe jest osiągnięcie maksymalnej prędkości, patrz \ref{sec:flags}\\
 	\hline 
 	-10 & BREACHED\_POS\_LIMIT  & zadana trajektoria przechodzi (nie w~miejscu początkowym lub końcowym) przez miejsce wykraczające poza limity silnika/stawu, możliwe tylko gdy prędkość początkowa/końcowa jest większa od tej jaką należy osiągnąć w~fazie bez przyśpieszenia\\
 	\hline
@@ -412,10 +414,10 @@
 	\end{table}	
 	
 	\section{Nowe komponenty OROCOS}
-	Zaimplementowano dwa nowe komponenty OROCOS'owe. Komponent akcji oraz generator trajektorii. Ich kody znajdują się w~katalogu \texttt{orocos\_controllers}. W~tej sekcji wytłumaczone zostanie ich działanie przy użyciu fragmentów kody źródłowego. Drobne zmiany jakie wprowadzono względem oryginalnego kodu (typu deklarowanie, konfiguracja nowych wektorów itp.) zostaną pominięte.
+	Zaimplementowano dwa nowe komponenty OROCOS'owe. Komponent akcji oraz generator trajektorii. Bazują one na ich odpowiednikach dla trajektorii spline'owch. Ich kody znajdują się w~katalogu \texttt{orocos\_controllers}. Drobne zmiany jakie wprowadzono względem oryginalnego kodu (typu deklarowanie, konfiguracja nowych wektorów itp.) zostaną pominięte.
 	
 	\subsection{Komponent akcji}
-	Zaimplementowany w~plikach \texttt{InternalSpaceTrapezoidTrajectoryAction.cpp} \linebreak i~\texttt{InternalSpaceTrapezoidTrajectoryAction.hpp}, rozpoczyna swój cykl życia od zaimportowania kolejnych parametrów z~serwera ROS'owego:
+	Zaimplementowany w~plikach \texttt{InternalSpaceTrapezoidTrajectoryAction.cpp} \linebreak i~\texttt{InternalSpaceTrapezoidTrajectoryAction.hpp}, komponent rozpoczyna swój cykl życia od zaimportowania kolejnych parametrów z~serwera ROS'owego:
 	\begin{itemize}
 	\item \texttt{joint\_names}, nazwy silników/stawów w~zależności od przestrzeni pracy;
 	\item \texttt{lower\_limits}, dolne położenia możliwe do osiągnięcia przez silniki/stawy;
@@ -424,25 +426,26 @@
 	Zgodnie ze strukturą komponentów OROCOS'owych, działających cyklicznie, moduł ma funkcję \texttt{updateHook} wraz z~dwiema metodami pomocniczymi \texttt{configureHook} oraz \texttt{stratHook}, ich implementacja jest wymagana\cite{orocosbuild}. Obie funkcje konfiguracyjne wywoływane są w~skrypcie \texttt{irp6-p-inside.ops}. Metoda \texttt{configureHook} inicjuje wektory danych do odpowiednich rozmiarów, oraz sprawdza, czy otrzymano odpowiednią liczbę ograniczeń. Natomiast funkcja uruchamiająca pracę komponentu uruchamia serwer akcji, ale ustawia flagę aktywnego celu na \textit{false}, skąd komponent wie, że w~danym momencie nie jest przeprowadzane przetwarzanie celu. Jednakże, by w~pełni móc przedstawić działanie metody \texttt{updateHook}, należy najpierw opisać funkcję \texttt{goalCB}. Jest ona asynchronicznie wywoływana, w~razie odebrania z~wyższej warstwy systemu (IRPOS-api) części \texttt{Goal} z~wiadomości \texttt{TrapezoidTrajectory.action}. Jeśli w~danym momencie jest przetwarzana już jakaś trajektoria nowy cel zostaje odrzucony. W~przeciwnym przypadku 
 	komponent wykonuje kolejne czynności:
 	\begin{enumerate}
-	\item wypełnienie \texttt{remapTable} odpowiedzialnej za zmapowanie nazw podanych w~wiadomości na kolejność nadaną w~serwerze parametrów. W~razie niepowodzenia, czyli niezgodnej liczby nazw silników/stawów, wysyłany jest kod błędu \textit{INVALID\_JOINTS}; 
-	\item sprawdzenie czy wszystkie zadane punkty mieszczą się w~ograniczeniach, w wypadku niespełnienia tego warunku w~którymkolwiek punkcie wysyłany jest błąd  \textit{INVALID\_GOAL};
-	\item jeśli użytkownik ustawił flagę \texttt{duration\_mode} na \textit{false}, sprawdzona zostaje liczba zadanych prędkości i~przyśpieszeń maksymalnych, niezgodna z~zadeklarowaną liczbą silników/stawów powoduje wysłanie wiadomości o~błędzie \textit{INVALID\_LIMIT\_ARRAY};
+	\item wypełnienie \texttt{remapTable} odpowiedzialnej za zmapowanie nazw podanych w~wiadomości na kolejność nadaną w~serwerze parametrów; w~razie niepowodzenia, czyli niezgodnej liczby nazw silników/stawów, wysyłany jest kod błędu \textit{INVALID\_JOINTS}; 
+	\item sprawdzenie czy wszystkie zadane punkty mieszczą się w~ograniczeniach; w~wypadku niespełnienia tego warunku w~którymkolwiek punkcie wysyłany jest błąd  \textit{INVALID\_GOAL};
+	\item jeśli użytkownik ustawił flagę \texttt{duration\_mode} na \textit{false}, sprawdzona zostaje liczba zadanych prędkości i~przyśpieszeń maksymalnych; niezgodna z~zadeklarowaną liczbą silników/stawów powoduje wysłanie wiadomości o~błędzie \textit{INVALID\_LIMIT\_ARRAY};
 	\item na podstawie \texttt{remapTable} zmapowane zostają wszystkie zadane, łącznie z~tablicami ograniczeń kinematycznych;
-	\item sprawdzona zostaje poprawność czasu podanego w~nagłówku, błąd wywołuje odesłanie kodu \textit{OLD\_HEADER\_TIMESTAMP};
+	\item sprawdzona zostaje poprawność czasu podanego w~nagłówku; błąd wywołuje odesłanie kodu \textit{OLD\_HEADER\_TIMESTAMP};
 	\item jeśli uda się połączyć ze wszystkimi komponentami rówieśniczymi wypełniona i~wysłana do generatora zostaje wiadomość typu \texttt{TrapezoidGoal}.
 	\end{enumerate}
 	Niespełnienie któregokolwiek z~warunków generujących błąd lub problem przy uruchomieniu rówieśników przerywa przetwarzanie wiadomości i~wywołuje odrzucenie zadanego celu. Nowością względem komponentu akcji trajektorii spline'owej jest przetwarzanie maksymalnych prędkości i~przyśpieszeń oraz przepisywanie ich wraz z~flagami. Dla wygody przebudowano stary kod i~przeniesiono jego fragmenty do dedykowanych funkscji.
-	\par Metoda \texttt{updateHook} (zgodnie z~ustawieniami z~dnia 30 maja 2018) wywoływana jest co 0.01 sekundy. Zadania jakie kolejno wykonuje to:
+	\par Metoda \texttt{updateHook} (zgodnie z~ustawieniami z~dnia pisania) wywoływana jest co 0.01 sekundy. Zadania jakie kolejno wykonuje to:
 	\begin{enumerate}
-	\item odczytuje dane o~właściwym i~zadanym położeniu silników/stawów;
-	\item sprawdza czy generator zasygnalizował zakończenie wykonywania trajektorii i~reaguje zależnie od otrzymanego wyniku oraz ułożenia robota;
-	\item analizuje możliwość przekroczenia tolerancji ścieżki (pomijane w~trybir \texttt{research\_mode});
-	\item wysyła część Feedback z~wiadomość typu action.
+	\item odczyt danych o~realnym i~zadanym położeniu silników/stawów;
+	\item sprawdzenie czy generator zasygnalizował zakończenie wykonywania trajektorii i~reakcja zależnie od otrzymanego wyniku oraz ułożenia robota;
+	\item analiza możliwość przekroczenia tolerancji ścieżki (pomijane w~trybie \texttt{research\_mode});
+	\item wysyłanie części Feedback z~wiadomość typu \textquotedblleft action\textquotedblright.
 	\end{enumerate}
-	Naturalnie punkt drugi wykonywany będzie  najrzadziej oraz zablokuje wykonywanie kolejnych czynności. Ponad to punkt trzeci i~czwarty zostaną aktywowane tylko jeśli aktywny jest cel oraz otrzymano nowe dane o~konfiguracji robota. Wykrycie przekroczenia ograniczeń ścieżki lub celu skutkuje odesłaniem do użytkownika odpowiedniej wiadomości błędu (patrz TODO) oraz odrzuceniem celu. Wygenerowane informacje o~błędach przy obliczaniu profili prędkościowych powodują tą sama reakcję. Ponownie wprowadzoną zmianą jest przebudowanie kodu, w~tym oddelegowanie części zadań do odpowiedni nazwanych funkcji oraz sposób ustalania zakończenia pracy nad celem (zamiast sprawdzania, czy minął zadany czas ruchu, komponent oczekuje na wiadomość od generatora).
+	Naturalnie punkt drugi wykonywany będzie  najrzadziej oraz zablokuje wykonywanie kolejnych czynności. Ponad to punkt trzeci i~czwarty zostaną aktywowane tylko jeśli aktywny jest cel oraz otrzymano nowe dane o~konfiguracji robota. Wykrycie przekroczenia ograniczeń ścieżki lub celu skutkuje odesłaniem do użytkownika odpowiedniej wiadomości błędu (\ref{tab:resultcodes}) oraz odrzuceniem celu. Wygenerowane informacje o~błędach przy obliczaniu profili prędkościowych powodują tą sama reakcję. Ponownie wprowadzoną zmianą jest przebudowanie kodu, w~tym oddelegowanie części zadań do odpowiedni nazwanych funkcji oraz sposób ustalania zakończenia pracy nad celem (zamiast sprawdzania, czy minął zadany czas ruchu, komponent oczekuje na wiadomość od generatora).
 	
 	\subsection{Generator trajektorii}
-	Kod źródłowy generatora rozłożony jest na dwa pliki: \linebreak \texttt{InternalSpaceTrapezoidTrajectoryGenerator.cpp} i~\texttt{velocityprofile\_trapezoid.cpp} oraz ich pliki nagłówkowe. Jest to zgodne z~konwencją przyjętą dla generatora spline'owego. Komponent \texttt{InternalSpaceTrapezoidTrajectoryGenerator} w~trakcie konfiguracji zwiększa wektor \texttt{vel\_profile\_} zgodnie z~podaną w~parametrach liczbą silników/stawów, co równoważne jest wywołaniu tej samej liczby konstruktorów domyślnych klasy \texttt{velocityprofile\_trapezoid}. Stąd komunikacja między komponentem, a~jego obiektami profili prędkościowych opiera się na wywoływaniu zadanych funkcji i~zwracania wartości, które odpowiadają wiadomościom podanym w~\hyperref[tab:resultcodes]{Tablicy 4}. Wpierw opisane zostanie działanie komponentu, a~następnie jego klasy z~wektora \texttt{vel\_profile\_}. 
+	\label{sec:trajgen}
+	Kod źródłowy generatora rozłożony jest na dwa pliki: \linebreak \texttt{InternalSpaceTrapezoidTrajectoryGenerator.cpp} i~\texttt{velocityprofile\_trapezoid.cpp}\linebreak oraz ich pliki nagłówkowe. Jest to zgodne z~konwencją przyjętą dla generatora spline'owego. Komponent \texttt{InternalSpaceTrapezoidTrajectoryGenerator} w~trakcie konfiguracji zwiększa wektor \texttt{vel\_profile\_} zgodnie z~podaną w~parametrach liczbą silników/stawów, co równoważne jest wywołaniu tej samej liczby konstruktorów domyślnych klasy \texttt{velocityprofile\_trapezoid}. Stąd komunikacja między komponentem, a~jego obiektami profili prędkościowych opiera się na wywoływaniu zadanych funkcji i~zwracania wartości, które odpowiadają wiadomościom podanym w~tabeli \ref{tab:resultcodes}. Wpierw opisane zostanie działanie komponentu, a~następnie jego klasy pomocniczej. 
 	
 	\subsubsection{\texttt{InternalSpaceTrapezoidTrajectoryGenerator}}
 	Tak samo jak w~przypadku komponentu akcji, konstruktor inicjuje pola klasy wartościami domyślnymi, konfiguruje porty komponentu oraz pobiera kolejne parametry z~serwera ROS'owego:
@@ -454,21 +457,21 @@
 	\item \texttt{max\_velocities}, prędkości maksymalne (obecnie bezpieczne wartości, które po badaniach zostaną zamienione na właściwe);
 	\item \texttt{max\_accelerations}, przyśpieszenia maksymalne (obecnie bezpieczne wartości, które po badaniach zostaną zamienione na właściwe).
 	\end{itemize}
-	\par W~przypadku generatora mamy do czynienie tylko z~czterema funkcjami właściwymi komponentom OROCOS'owym. Są to metody \texttt{*Hook}. Funkcję konfiguracyjną \texttt{cofigureHook} można pokrótce opasać jako inicjalizują porty (\texttt{setDataSample}) oraz zmienne zależne od parametrów pobranych z~serwera. Wywoływana jest ona na etapie przetwarzania skryptu \linebreak\texttt{ipr6-p-inside.opt}. Warto zauważyć, że w~momencie uruchamiania skryptu użytkownika komponent wciąż nie jest gotowy do synchronicznej pracy, bo w~przeciwieństwie do \linebreak\texttt{InternalSpaceTrapezoidTrajectoryAction}, pliki wywoływane przez \texttt{roslaunch \linebreak irp6\_bringup irp6-*-nohardware.launch} nie zawierają komendy start dla niego. Dopiero gdy wywołana zostanie jedna z~metod opisanych na początku~\hyperref[sec:api]{sekcji 4}, poprzez \texttt{connmanSwitch} aktywuje generator. Zapewnia to brak konfliktów między różnymi generatorami, korzystającymi z~tych samych portów. Dopiero teraz metoda \texttt{statrHook} sygnalizuje swoja aktywność przez porty synchronizacji. Zmiany jakie wprowadzono do wyżej wymienionych funkcji są drobne i~polegają na inicjalizacji dodanych pól. 
-	\par Najważniejszą częścią komponentu jest metoda \texttt{updateHook}. Każde jej wywołanie pociąga za sobą zasygnalizowanie o~aktywności komponentu oraz sprawdzenie czy nadesłany został nowy cel. Niezależnie od wyniku poprzedniego testu, czyli od tego czy w~danym momencie zmienna zadanych punktów trajektorii pochodzi z~pierwszego odczytu położenia silników/stawów, czy z~obliczeń klas profili prędkościowych, na port zadanych wpisywana jest zawartość wektora \texttt{setpoint\_}. Co więcej przy fladze \texttt{save\_data} ustawionej na \textit{true} przed wysłaniem danych zostaną one zapisane do wektorów-kontenerów. Ze względu na naturę procesów czasu rzeczywistego predefiniowana jest wielkość wektorów, więc przy długim czasie pracy generatora może dojść do niepełnego zapisu. Nadejście nowej wiadomości od komponentu akcji skutkuje przepisaniem danych z~niej do pól obiektu generatora oraz ustawieniem wartości zmiennej \texttt{trajectory\_active\_} na \textit{true}. Ta flaga, obok poprawności nagłówka wiadomości, jest sprawdzana przed rozpoczęciem jakichkolwiek obliczeń. Zachowano z~generatora spline'owego nadpisywanie w~przypadku gdy w~trakcie pracy nad jednym celem przyjdzie nowe żądanie. 
+	\par W~przypadku generatora mamy do czynienie tylko z~czterema funkcjami właściwymi komponentom OROCOS'owym. Są to metody \texttt{*Hook}. Funkcję konfiguracyjną \texttt{cofigureHook} można pokrótce opasać jako inicjalizują porty (\texttt{setDataSample}) oraz zmienne zależne od parametrów pobranych z~serwera. Wywoływana jest ona na etapie przetwarzania skryptu \linebreak\texttt{ipr6-p-inside.opt}. Warto zauważyć, że w~momencie uruchamiania skryptu użytkownika komponent wciąż nie jest gotowy do synchronicznej pracy, bo w~przeciwieństwie do \linebreak\texttt{InternalSpaceTrapezoidTrajectoryAction}, pliki wywoływane przez \texttt{roslaunch \linebreak irp6\_bringup irp6-*-nohardware.launch} nie zawierają komendy start dla niego. Dopiero gdy wywołana zostanie jedna z~metod opisanych na początku sekcji \ref{sec:api}, poprzez \texttt{connmanSwitch} api aktywuje generator. Zapewnia to brak konfliktów między różnymi generatorami, korzystającymi z~tych samych portów. Dopiero teraz metoda \texttt{startHook} sygnalizuje aktywność komponentu przez porty synchronizacji. Zmiany jakie wprowadzono do wyżej wymienionych funkcji są drobne i~polegają na inicjalizacji dodanych pól. 
+	\par Najważniejszą częścią komponentu jest metoda \texttt{updateHook}. Każde jej wywołanie pociąga za sobą zasygnalizowanie o~aktywności komponentu oraz sprawdzenie czy nadesłany został nowy cel. Niezależnie od wyniku poprzedniego testu, czyli od tego czy w~danym momencie wektor zadanych punktów trajektorii pochodzi z~pierwszego odczytu położenia silników/stawów, czy z~obliczeń klas profili prędkościowych, na port zadanych wpisywana jest zawartość zmiennej \texttt{setpoint\_}. Co więcej przy fladze \texttt{save\_data} ustawionej na \textit{true} przed wysłaniem danych zostaną one zapisane do wektorów-kontenerów. Ze względu na naturę procesów czasu rzeczywistego predefiniowana jest wielkość wektorów, więc przy długim czasie pracy generatora może dojść do niepełnego zapisu. Nadejście nowej wiadomości od komponentu akcji skutkuje przepisaniem danych z~niej do pól obiektu generatora oraz ustawieniem wartości zmiennej \texttt{trajectory\_active\_} na \textit{true}. Ta flaga, obok poprawności nagłówka wiadomości, jest sprawdzana przed rozpoczęciem jakichkolwiek obliczeń. Zachowano z~generatora spline'owego nadpisywanie w~przypadku gdy w~trakcie pracy nad jednym celem przyjdzie nowe żądanie. 
 	\par Gdy aktywny jest cel, w~zależności od trybu zdefiniowanego przez użytkownika, uruchamiana jest jedna z~dwóch metod:
 	\begin{itemize}
 	\item \texttt{updateHookWithVelocityBasedProfiles};
 	\item \texttt{updateHookWithDurationBasedProfiles}.
 	\end{itemize}
-	Ich działanie niewiele różni się od siebie. Postanowiono zastosować oddzielne funkcje ze względu na ewentualne łatwiejsze wprowadzanie oddzielnych, bardziej prawdopodobnych zmian. Schemat działania (uogólniony dla obu trybów) pokazany jest na \hyperref[uHD]{rysunku 2}. Każdy z~kroków przedstawiony na tym schemacie (poza start i~koniec) wiąże się z~wywołaniem podfunkcji. Obliczanie profili prędkościowych wiąże się z~wywołaniem odpowiedniej dla trybu działania metody obiektu klasy \texttt{velocitiprofile\_trapezoid}. Dodatkowo niepowodzenie przy obliczaniu profilu wywołuje wysłanie wiadomości o~niepowodzeniu do komponentu akcji, a~przy fladze \texttt{save\_data} ustawionej na \textit{true} dezaktywacja trajektorii powoduje zapis danych na dysk.
+	Ich działanie niewiele różni się od siebie. Postanowiono zastosować oddzielne funkcje ze względu na ewentualne łatwiejsze wprowadzanie oddzielnych, bardziej prawdopodobnych zmian. Schemat działania (uogólniony dla obu trybów) pokazany jest na rysunku \ref{fig:uHD}. Każdy z~kroków przedstawiony na tym schemacie (poza start i~koniec) to metoda komponentu. Obliczanie profili prędkościowych wiąże się z~wywołaniem odpowiedniej dla trybu działania metody obiektu klasy \texttt{velocitiprofile\_trapezoid}. Dodatkowo niepowodzenie przy obliczaniu profilu wywołuje wysłanie wiadomości o~niepowodzeniu do komponentu akcji, a~przy fladze \texttt{save\_data} ustawionej na \textit{true} dezaktywacja trajektorii powoduje zapis danych na dysk.
 	\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\textwidth]{raport_pics/updateHookDiagram.png}
 	\caption{Schemat pracy uogólniony dla obu trybów pracy \texttt{updateHook}.}
-	\label{uHD}
+	\label{fig:uHD}
 	\end{figure}
-	\par Różnice pomiędzy działaniem funkcji dla trybu prędkościowego i~czasowego podsumowane są w~\hyperref[tab:modediffUH]{tablicy 5}.
+	\par Różnice pomiędzy działaniem funkcji dla trybu prędkościowego i~czasowego podsumowane są w~tablicy \ref{tab:modediffUH}.
 	
 	\begin{table}[H]
 	\label{tab:modediffUH}
@@ -493,7 +496,7 @@
 	\item obliczenie współczynników profilu prędkościowego; 
 	\item obliczanie pozycji/prędkości/przyśpieszenia dla danego momentu.
 	\end{itemize}
-	\hyperref[tab:velProfConds]{Tablica 6} przedstawia jakie warunki muszą zostać spełnione by żądanie zostało uznane za wykonywalne. Odpowiadają one błędom od -7 do -14 z \hyperref[tab:resultcodes]{tablicy 4}.
+	Tablica \ref{tab:velProfConds} przedstawia jakie warunki muszą zostać spełnione by żądanie zostało uznane za wykonywalne. Odpowiadają one błędom od -7 do -14 z~tablicy \ref{tab:resultcodes}.
 	\begin{table}[H]
 	\label{tab:velProfConds}
 	\centering
@@ -530,16 +533,16 @@
 	\caption{Warunki realizowalności żądania użytkownika}
 	\end{table}
 	
-	\par Współczynniki profilu prędkościowego obliczane są na podstawie wzorów z~\hyperref[sec:math]{sekcji 2}. Natomiast obliczanie położenia dla danej chwili następuje przy wywołaniu publicznej funkcji przez klasę główną generatora. Przemnażają one współczynniki przez kolejne potęgi podanej chwili $t$.
+	\par Współczynniki profilu prędkościowego obliczane są na podstawie wzorów z~sekcji \ref{sec:math}. Natomiast obliczanie położenia dla danej chwili następuje przy wywołaniu publicznej funkcji przez klasę główną generatora. Przemnażają one współczynniki przez kolejne potęgi podanej chwili $t$.
 	
 	\section{Testowanie}
-	Testowanie generatora rozpoczęto od sprawdzenia, czy działał on przy najprostszych przykładach. Następnie przetestowano wykrywanie nierealizowanych zadanych. Każda próba została poprzedzona oceną zadanych za pomocą skryptów Matlab'owych. Dla funkcji działających w~przestrzeni stawów dodatkowo sprawdzano czy przeniesienie trajektorii do przestrzeni silników nie spowoduje problemów. Wyniki oceniano na podstawie zebranych danych o~położeniach trajektorii wytworzonej przez generator, ostatecznego wyniku pobranego przez IRPOS-api oraz na podstawie obrazu wizualizacji. Każda z~funkcji przedstawionych w~\hyperref[sec:api]{sekcji 5} została przetestowana oddzielnie. Zgodnie z~założeniami przedstawionymi w~\hyperref[sec:borderVels]{sekcji 5.5}, nie testowano nadania prędkości granicznych.
+	Testowanie generatora rozpoczęto od sprawdzenia, czy działał on przy najprostszych przykładach. Następnie przetestowano wykrywanie nierealizowanych zadanych. Każda próba została poprzedzona oceną zadanych za pomocą skryptów Matlab'owych. Dla funkcji działających w~przestrzeni stawów dodatkowo sprawdzano czy przeniesienie trajektorii do przestrzeni silników nie spowoduje problemów. Wyniki oceniano na podstawie zebranych danych o~położeniach trajektorii wytworzonej przez generator, ostatecznego wyniku pobranego przez IRPOS-api oraz na podstawie obrazu wizualizacji. Każda z~funkcji przedstawionych w~sekcji \ref{sec:api} została przetestowana oddzielnie. Zgodnie z~założeniami przedstawionymi w~sekcji \ref{sec:borderVels}, nie testowano nadania prędkości granicznych.
 	\subsection{\texttt{move\_to\_motor\_position\_trapezoid\_velocity}}
 	Testowanie funkcji działającej w~przestrzeni silników w~trybie prędkościowym.
 	\subsubsection{Proste działanie w~trybie niebadawczym}
 	\label{sec:MPV}
 	Początkowo zadano nastawy, które wymuszały ruch tylko jednego silnika. Podane są w~\hyperref[tab:setup1]{tablicy 7}, każdy wiersz reprezentuje oddzielną symulację. Następnie zastosowano te same nastawy, ale tym razem jednocześnie. W~kolejnym kroku przeprowadzono symulację ruchu w~drugą stronę. 	
-	\par Ze względu na liczbę symulacji wykresy z~wynikami pierwszych dwóch testów przedstawiono tylko dla jednego silnika. \hyperref[fig:simpMPVall]{Rysunek 6} jest zbiorem wykresów kolejnych stawów, gdy uruchomiono zmianę położeń z~\hyperref[tab:setup1]{tablicy 7} jednocześnie. Widać na nim, że zgodnie z~założeniami trybu prędkościowego każdy staw kończy poruszanie się w~innym momencie.
+	\par Ze względu na liczbę symulacji wykresy z~wynikami pierwszych dwóch testów przedstawiono tylko dla jednego silnika. Rysunek \ref{fig:simpMPVall} jest zbiorem wykresów kolejnych stawów, gdy uruchomiono zmianę położeń z~tabeli \ref{tab:setup1} jednocześnie. Widać na nim, że zgodnie z~założeniami trybu prędkościowego każdy staw kończy poruszanie się w~innym momencie.
 	\newpage
 	\begin{table}[H]
 	\centering
@@ -592,7 +595,7 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.2]{raport_graphs/simpMPV.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup1]{tablicy 7}.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup1}.}
 		\label{fig:simpMPV}
 	\end{figure}
 
@@ -600,14 +603,14 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.2]{raport_graphs/simpMPVrevers.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup1]{tablicy 8}.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup1}.}
 		\label{fig:simpMPVrevers}
 	\end{figure}
 		
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.1]{raport_graphs/simpMPVall.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup1]{tablicy 8}.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup1}.}
 		\label{fig:simpMPVall}
 	\end{figure}
 		
@@ -665,45 +668,45 @@
 	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników. Tryb badawczy.}
 	\label{tab:setup4}
 	\end{table}
-	Wyniki uzyskane dla trybu badawczego w~postaci wykresów (\hyperref[fig:simpMPVR]{rysunek 7},\hyperref[fig:simpMPVRrevers]{rysunek 8},\hyperref[fig:simpMPVRall]{rysunek 9}), są tożsame z wynikami z~\hyperref[sec:MPVR]{sekcji 8.1.1}.
+	Wyniki uzyskane dla trybu badawczego w~postaci wykresów (\ref{fig:simpMPVR},\ref{fig:simpMPVRrevers},\ref{fig:simpMPVRall}), są tożsame z wynikami z~sekcji \ref{sec:MPVR}.
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.1]{raport_graphs/simpMPVR.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup3]{tablicy 10}. Tryb badawczy.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup3}. Tryb badawczy.}
 		\label{fig:simpMPVR}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.1]{raport_graphs/simpMPVRrevers.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup4]{tablicy 11}. Tryb badawczy.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup4}. Tryb badawczy.}
 		\label{fig:simpMPVRrevers}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.1]{raport_graphs/simpMPVRall.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup3]{tablicy 10}. Tryb badawczy.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup3}. Tryb badawczy.}
 		\label{fig:simpMPVRall}
 	\end{figure}
 	
-	Jak wspomniano, spodziewano się błędu na silniku 4, przy ruchu $ q_i>q_f$. Takowy otrzymano, co potwierdza \hyperref[fig:res_fail_msg]{rysunek 10} udokumoentowujący go. Warto zaznaczyć, że system numeruje silniki od zera, więc liczba porządkowa jest mniejsza o~jeden.
+	Jak wspomniano, spodziewano się błędu na silniku 4, przy ruchu $ q_i>q_f$. Takowy otrzymano, co potwierdza rysunek \ref{fig:res_fail_msg} udokumentowujący go. Warto zaznaczyć, że system numeruje silniki od zera, więc liczba porządkowa jest mniejsza o~jeden.
 	
 	\begin{figure}[H]
 	 	\centering
 	 	\includegraphics[scale=0.635]{raport_pics/res_fail_msg.png}
-	 	\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach dla silnika 4~z~\hyperref[tab:setup4]{tablicy~11}. Tryb badawczy.}
+	 	\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach dla silnika 4~z~tabeli \ref{tab:setup4}. Tryb badawczy.}
 		\label{fig:res_fail_msg}
 	\end{figure}
 	
-	Otrzymane wykresy są tożsame z~wykresami otrzymanymi w~sekcji \hyperref[sec:MPV]{8.1.1}, co łącząc z~wynikami ruchu odwrotnego silnika 4, pozwala stwierdzić, że tryb badawczy działa zgodnie z~założeniami. 
+	Otrzymane wykresy są tożsame z~wykresami otrzymanymi w~sekcji \ref{sec:MPV}, co łącząc z~wynikami ruchu odwrotnego silnika 4, pozwala stwierdzić, że tryb badawczy działa zgodnie z~założeniami. 
 
 	\subsection{\texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity}}
 	Testowanie funkcji działającej w~przestrzeni silników w~trybie prędkościowym, pozwalającej na osiągnięcie kilku kolejnych punktów przy jednym wywołaniu funkcji. 
 	\subsubsection{Proste działanie w~trybie niebadawczym}
 	\label{sec:MTV}
-	Ponownie przeprowadzono najpierw badania trajektorii oddzielnie dla każdego silnika, następnie dla wszystkich naraz. Nie przeprowadzano badań oddzielnie dla ruchu $ q_i>q_f $ ze względu na zawarcie ich w~trajektorii zadanej. Zadane przedstawiono w~\hyperref[tab:setup5]{tablicy 11}. Pominięto w~niej prędkości początkowe i~końcowe, które nie podgalają badaniu.
+	Ponownie przeprowadzono najpierw badania trajektorii oddzielnie dla każdego silnika, następnie dla wszystkich naraz. Nie przeprowadzano badań oddzielnie dla ruchu $ q_i>q_f $ ze względu na zawarcie ich w~trajektorii zadanej. Zadane przedstawiono w~tabeli \ref{tab:setup5}. Pominięto w~niej prędkości początkowe i~końcowe, które nie podgalają badaniu.
 	
 	\begin{table}[H]
 	\centering
@@ -732,26 +735,26 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.1]{raport_graphs/simpMTV.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup5]{tablicy 11}.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup5}.}
 		\label{fig:simpMTV}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.1]{raport_graphs/simpMTVall.pdf}
-		\caption{Wyniki testu trajektorii dla wszystkich silników funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup5]{tablicy 11}.}
+		\caption{Wyniki testu trajektorii dla wszystkich silników funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup5}.}
 		\label{fig:simpMTVall}
 	\end{figure}
 	
-	Jak widać na \hyperref[fig:simpMTVall]{rysunku 12}, silniki "czekają" na siebie. Wizualizują to wypłaszczenia na wykresach. Jest to zgodne z~założeniami generatora. 
+	Jak widać na rysunku \ref{fig:simpMTVall}, silniki "czekają" na siebie. Wizualizują to wypłaszczenia na wykresach. Jest to zgodne z~założeniami generatora. 
 	
 	\subsubsection{Proste działanie w~trybie badawczym}
-	Działanie w~trybie badawczym powinno nie pozwolić na ruch silnika dla nastaw z~\hyperref[tab:setup5]{tablicy 11}, dla silników 2~i~3. 
+	Działanie w~trybie badawczym powinno nie pozwolić na ruch silnika dla nastaw z~tabeli \ref{tab:setup5}, dla silników 2~i~3. 
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.1]{raport_graphs/simpMTVR.pdf}
-		\caption{Wyniki testu trajektorii dla trzeciego silnika funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~\hyperref[tab:setup5]{tablicy 11}.Tryb badawczy.}		
+		\caption{Wyniki testu trajektorii dla trzeciego silnika funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_velocity} przy nastawach z~tabeli \ref{tab:setup5}.Tryb badawczy.}		
 		\label{fig:simpMTVR}
 	\end{figure}
 	Rysunek \ref{fig:simpMTVR} pokazuje, różnice pomiędzy trajektorią wygenerowaną w~Matlab'ie, trybem normalnym i~badawczym. Jak się spodziewano tryb badawczy przerwał działanie gdy napotkał problem niemożliwości osiągnięcia maksymalnej prędkości. Jest to zgodne z~założeniami trybu badawczego. Przerwanie pracy następuje nie przed rozpoczęciem całej trajektorii, gdyż zakłada się, że zebranie przynajmniej początkowych danych może być przydatne. Ze względu na alegoryczny wygląd wiadomości błędu do rysunku \ref{fig:res_fail_msg}, pominięto ponowne jego przedstawienie. 
@@ -1015,10 +1018,12 @@
 	\label{tab:setup12}
 	\end{table}	
 	
-	\subsection{\texttt{move\_to\_joint\_position\_trapezoid\_velocity}}
-	Testowanie funkcji działającej w~przestrzeni stawów w~trybie prędkościowym. Wykresy wyników rozszerzone zostały o~symulację odpowiedniego ruchu silników.
-	
-	\subsubsection{Proste działanie w~trybie badawczym}	
+	\subsection{Działanie w~przestrzeni stawów}
+	Przedstawienie testowanie funkcji w~przestrzeni stawów zostało ograniczone do wykresów dla funkcji \texttt{move\_to\_joint\_position\_trapezoid\_velocity} oraz \texttt{move\_to\_joint\_position\_trapezoid\_duration} w~trybie niebadawczym. Jest to motywowane tym, że kod komponentów jest taki sam, więc wystarczy pokazać, że skutecznie podłączono komponent stawów do systemu oraz pobranie właściwych parametrów dla trybu czasowego.
+
+	\subsubsection{\texttt{move\_to\_joint\_position\_trapezoid\_velocity}}
+	Wyniki testów funkcji przestrzeni stawów w~trybie prędkościowym.
+
 	\begin{table}[H]
 	\centering
 	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
@@ -1026,20 +1031,20 @@
 	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
 	\hline
 	\hline
-	\hspace{1em}1& -0.1006 & -0.4 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %400.01624549348827
+	\hspace{1em}1& -0.1006 & 0.4 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %400.01624549348827
 	\hline
-	\hspace{1em}2& -1.5419 & 100.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %100.06493977550167
+	\hspace{1em}2& -1.5419 & -1.1 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %100.06493977550167
 	\hline
-	\hspace{1em}3& 0.0197 & 100.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %100.05074855824355
+	\hspace{1em}3& 0.0197 & 0.4 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %100.05074855824355
 	\hline
-	\hspace{1em}4& 1.1335 & 350.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %350.03683107162874
+	\hspace{1em}4& 1.1335 & 1.55 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %350.03683107162874
 	\hline
-	\hspace{1em}5& 3.6581 & 400.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %400.0004100112147
+	\hspace{1em}5& 3.6581 & 4.5 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %400.0004100112147
 	\hline
-	\hspace{1em}6& -2.7381 & 2000.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %2000.0423718337847
+	\hspace{1em}6& -2.7381 & 0.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %2000.0423718337847
 	\hline
 	\end{tabular}
-	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych stawów.}
 	\label{tab:simpJPV}
 	\end{table}
 	
@@ -1050,46 +1055,81 @@
 	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
 	\hline
 	\hline
-	\hspace{1em}1& 0.0 & -400.0 & 0.0 & 0.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %-400.0162154089848
+	\hspace{1em}1& -0.1006 & -0.4 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %400.01624549348827
 	\hline
-	\hspace{1em}2& 0.0 & -100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-100.06384704599024
+	\hspace{1em}2& -1.5419 & -2.1 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %100.06493977550167
 	\hline
-	\hspace{1em}3& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-70.04977729182792
+	\hspace{1em}3& 0.0197 & -0.4 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %100.05074855824355
 	\hline
-	\hspace{1em}4& 0.0 & -60.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-60.036372838521224
+	\hspace{1em}4& 1.1335 & 0.5 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %350.03683107162874
 	\hline
-	\hspace{1em}5& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-70.00005703129563
+	\hspace{1em}5& 3.6581 & -2.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %400.0004100112147
 	\hline
-	\hspace{1em}6& 0.0 & -900.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-900.0418019049634
+	\hspace{1em}6& 0.0 & -2.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %2000.0423718337847
 	\hline
 	\end{tabular}
-	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych stawów.}
 	\label{tab:simpJPVrevers}
 	\end{table}
+	
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& -0.1006 & -0.3 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %400.01624549348827
+	\hline
+	\hspace{1em}2& -1.5419 & -1.3 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %100.06493977550167
+	\hline
+	\hspace{1em}3& 0.0197 & 0.3 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %100.05074855824355
+	\hline
+	\hspace{1em}4& 1.1335 & -1.3 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %350.03683107162874
+	\hline
+	\hspace{1em}5& 3.6581 & 2.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %400.0004100112147
+	\hline
+	\hspace{1em}6& -2.7381 & 0.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %2000.0423718337847
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie wszystkich stawów.}
+	\label{tab:simpJPVall}
+	\end{table}
+	
 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.2]{raport_graphs/simpJPV.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPV}.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_joint\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPV}.}
 		\label{fig:simpJPV}
 	\end{figure}
-
 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.2]{raport_graphs/simpJPVrevers.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPVrevers}.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_joint\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPVrevers}.}
 		\label{fig:simpJPVrevers}
 	\end{figure}
 		
 	\begin{figure}[H]
 		\centering
-		\includegraphics[scale=1.1]{raport_graphs/simpJPVall.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPV}.}
+		\includegraphics[scale=1.05]{raport_graphs/simpJPVall.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_joint\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPVall}.}
 		\label{fig:simpJPVall}
 	\end{figure}
 	
+	\subsubsection{\texttt{move\_to\_joint\_position\_trapezoid\_duration}}
+	Wyniki testów funkcji przestrzeni stawów w~trybie czasowym. W~tej sekcji ograniczono się do wykresu ruchu pierwszego stawu, przy zadanych z~tablicy \ref{tab:simpJPV}. Identyczność wyników sygnalizuje poprawność pobrania zmiennych z~serwera parametrów.
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.05]{raport_graphs/simpJPD.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_joint\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:simpJPV}.}
+		\label{fig:simpJPD}
+	\end{figure}
+	
+
 \newpage	
 \begin{thebibliography}{9}
 \bibitem{ROS} 
@@ -1097,20 +1137,20 @@ Dokumentacja pakietu actionlib
 
 http://wiki.ros.org/actionlib, Open Source Robotics Fundation, kwiecień 2018.
 
-\bibitem{jtm} 
-Dokumentacja wiadomości trajectory\_msgs/JointTrajectory
+%\bibitem{jtm} 
+%Dokumentacja wiadomości trajectory\_msgs/JointTrajectory
 
-http://docs.ros.org/api/trajectory\_msgs/html/msg/JointTrajectory.html, Open Source Robotics Fundation, maj 2018.
+%http://docs.ros.org/api/trajectory\_msgs/html/msg/JointTrajectory.html, Open Source Robotics Fundation, maj 2018.
 
-\bibitem{cmjtm} 
-Dokumentacja wiadomości control\_msgs/JointTolerance.msg
+%\bibitem{cmjtm} 
+%Dokumentacja wiadomości control\_msgs/JointTolerance.msg
 
-http://docs.ros.org/jade/api/control\_msgs/html/msg/JointTolerance.html, Open Source Robotics Fundation, luty 2016.
+%http://docs.ros.org/jade/api/control\_msgs/html/msg/JointTolerance.html, Open Source Robotics Fundation, luty 2016.
 
-\bibitem{jtpm}
-Dokumentacja wiadomości trajectory\_msgs/JointTrajectoryPoint.msg
+%\bibitem{jtpm}
+%Dokumentacja wiadomości trajectory\_msgs/JointTrajectoryPoint.msg
 
-http://docs.ros.org/api/trajectory\_msgs/html/msg/JointTrajectoryPoint.html, Open Source Robotics Fundation, maj 2018.
+%http://docs.ros.org/api/trajectory\_msgs/html/msg/JointTrajectoryPoint.html, Open Source Robotics Fundation, maj 2018.
 
 \bibitem{orocosbuild} 
 The Orocos Component Builder's Manual

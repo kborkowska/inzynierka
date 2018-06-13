@@ -2,7 +2,7 @@
 \BOOKMARK [1][-]{section.2}{Trajektorie o trapezoidalnym profilu predkosciowym}{}% 2
 \BOOKMARK [1][-]{section.3}{Kr\363tki opis nowych modu\233\363w}{}% 3
 \BOOKMARK [1][-]{section.4}{Uruchamianie systemu w trybie nohardware}{}% 4
-\BOOKMARK [1][-]{section.5}{Korzystanie z IRPOS-api}{}% 5
+\BOOKMARK [1][-]{section.5}{Nowe funkcje systemu IRPOS}{}% 5
 \BOOKMARK [2][-]{subsection.5.1}{R\363znice pomiedzy metodami motor i joint}{section.5}% 6
 \BOOKMARK [2][-]{subsection.5.2}{R\363znice pomiedzy metodami move\137to\137*\137position i move\137along\137*\137trajectory}{section.5}% 7
 \BOOKMARK [2][-]{subsection.5.3}{Metody velocity i duration}{section.5}% 8
@@ -10,9 +10,9 @@
 \BOOKMARK [2][-]{subsection.5.5}{Predkosci graniczne}{section.5}% 10
 \BOOKMARK [2][-]{subsection.5.6}{Funkcje pomocnicze}{section.5}% 11
 \BOOKMARK [1][-]{section.6}{Wiadomosci typu Trapezoid}{}% 12
-\BOOKMARK [2][-]{subsubsection.6.0.1}{TrapezoidTrajectory.action}{section.6}% 13
-\BOOKMARK [2][-]{subsection.6.1}{TrapezoidGeneratorGoal.msg}{section.6}% 14
-\BOOKMARK [2][-]{subsection.6.2}{TrapezoidGeneratorResult.msg}{section.6}% 15
+\BOOKMARK [2][-]{subsection.6.1}{TrapezoidTrajectory.action}{section.6}% 13
+\BOOKMARK [2][-]{subsection.6.2}{TrapezoidGeneratorGoal.msg}{section.6}% 14
+\BOOKMARK [2][-]{subsection.6.3}{TrapezoidGeneratorResult.msg}{section.6}% 15
 \BOOKMARK [1][-]{section.7}{Nowe komponenty OROCOS}{}% 16
 \BOOKMARK [2][-]{subsection.7.1}{Komponent akcji}{section.7}% 17
 \BOOKMARK [2][-]{subsection.7.2}{Generator trajektorii}{section.7}% 18
@@ -31,3 +31,6 @@
 \BOOKMARK [2][-]{subsection.8.4}{move\137along\137motor\137trajectory\137trapezoid\137duration}{section.8}% 31
 \BOOKMARK [3][-]{subsubsection.8.4.1}{Proste dzia\233anie w trybie niebadawczym}{subsection.8.4}% 32
 \BOOKMARK [3][-]{subsubsection.8.4.2}{Proste dzia\233anie w trybie badawczym}{subsection.8.4}% 33
+\BOOKMARK [2][-]{subsection.8.5}{Dzia\233anie w przestrzeni staw\363w}{section.8}% 34
+\BOOKMARK [3][-]{subsubsection.8.5.1}{move\137to\137joint\137position\137trapezoid\137velocity}{subsection.8.5}% 35
+\BOOKMARK [3][-]{subsubsection.8.5.2}{move\137to\137joint\137position\137trapezoid\137duration}{subsection.8.5}% 36

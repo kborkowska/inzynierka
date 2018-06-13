@@ -38,7 +38,7 @@
 
 
 \begin{figure}[tb]
-\tikzsetnextfilename{simpJPV}
+\tikzsetnextfilename{simpJPD}
 	\begin{tikzpicture}
 			\begin{groupplot}[group style={group size=1 by 4, horizontal sep={1cm},vertical sep={2cm}},
 			width=0.9\textwidth,height=0.3\textwidth]
@@ -46,12 +46,12 @@
 			\nextgroupplot
 			[
 			width=0.9\textwidth,
-			xmin=0,xmax=3.2,ymin=-0.101,ymax=0.401,
+			xmin=0,xmax=3.2,ymin=-0.101,ymax=0.41,
 			xlabel={$t$},
 			ylabel={$Position$},
 			xtick={0,0.5,1.0,1.5,2.0,2.5},
 			ytick={-0.1,0.0,0.1,0.2,0.3},
-			extra y ticks={-0.4},
+			extra y ticks={0.4},
 			extra x ticks={3.17},
 			extra tick style={grid=major},
 			y tick label style={/pgf/number format/1000 sep=},
@@ -62,33 +62,33 @@
 			\nextgroupplot
 			[
 			width=0.9\textwidth,
-			xmin=0,xmax=3.2,ymin=-0.101,ymax=0.401,
+			xmin=0,xmax=3.2,ymin=-0.101,ymax=0.41,
 			xlabel={$t$},
 			ylabel={$Position$},
 			xtick={0,0.5,1.0,1.5,2.0,2.5},
 			ytick={-0.1,0.0,0.1,0.2,0.3},
-			extra y ticks={-0.4},
+			extra y ticks={0.4},
 			extra x ticks={3.17},
 			extra tick style={grid=major},
 			y tick label style={/pgf/number format/1000 sep=},
 			title = Zadane generatora,
 			]
-			\addplot[magenta,semithick] file {SymulationResults/JPV:0.300000:0.200000:-0.100633:0.400000/joint-1-setpoint.txt};
+			\addplot[magenta,semithick] file {SymulationResults/JPD:0.300000:0.200000:-0.100633:0.400000/joint-1-setpoint.txt};
 			\nextgroupplot
 			[
 			width=0.9\textwidth,
-			xmin=0,xmax=3.2,ymin=-0.101,ymax=0.401,
+			xmin=0,xmax=3.2,ymin=-0.101,ymax=0.41,
 			xlabel={$t$},
 			ylabel={$Position$},
 			xtick={0,0.5,1.0,1.5,2.0,2.5},
 			ytick={-0.1,0.0,0.1,0.2,0.3},
-			extra y ticks={-0.4},
+			extra y ticks={0.4},
 			extra x ticks={3.17},
 			extra tick style={grid=major},
 			y tick label style={/pgf/number format/1000 sep=},
 			title = Wyniki symulacji,
 			]
-			\addplot[blue,semithick] file {SymulationResults/JPV:0.300000:0.200000:-0.100633:0.400000/joint-1-result.txt};
+			\addplot[blue,semithick] file {SymulationResults/JPD:0.300000:0.200000:-0.100633:0.400000/joint-1-result.txt};
 			
 			\nextgroupplot
 			[
