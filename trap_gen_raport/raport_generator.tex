@@ -774,9 +774,9 @@
 	\hline
 	\hspace{1em}1& 0.0 & 400.0 & 200.0 & -200.0 & 100.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %-400.0144095369332
 	\hline
-	\hspace{1em}2& 0.0 & -100.0 & 100.0 & 20.0 & 0.0 & 35.0 & 20&\hspace{2em}X\\ %-100.06421548964671
+	\hspace{1em}2& 0.0 & -100.0 & 100.0 & 20.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-100.06421548964671
 	\hline
-	\hspace{1em}3& 0.0 & -70.0 & 50.0 & 0.0 & -30.0 & 35.0 & 20&\hspace{2em}X\\ %-70.05025772296632
+	\hspace{1em}3& 0.0 & -70.0 & 50.0 & 0.0 & -30.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-70.05025772296632
 	\hline
 	\hspace{1em}4& 0.0 & 350.0 & 100.0 & 200.0 & -50.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-8.869543149594518e-13
 	\hline
@@ -870,26 +870,224 @@
 	Zgodnie z~sekcją \ref{sec:flags} nie spodziewana jest żadna różnica pomiędzy pracą funkcji w~trybie normalnym i~badawczym. Spowodowane jest to niebadaniem prędkości początkowych/końcowych, które były by zakazane oraz faktem, że tryb czasowy nie został stworzony do celu badania właściwości kinematycznych robota. 
 	Zadane dla ruchu są tożsame z~podanymi w~tabelach \ref{tab:setup7} oraz \ref{tab:setup8}. Wyniki badania podane, przedstawione na wykresach \ref{fig:simpMPDR},\ref{fig:simpMPDRrevers} oraz \ref{fig:simpMPDRall}, potwierdzają poprawne działanie funkcji.
 	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & 400.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %400.01624549348827
+	\hline
+	\hspace{1em}2& 0.0 & 100.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %100.06493977550167
+	\hline
+	\hspace{1em}3& 0.0 & 100.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %100.05074855824355
+	\hline
+	\hspace{1em}4& 0.0 & 350.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %350.03683107162874
+	\hline
+	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %400.0004100112147
+	\hline
+	\hspace{1em}6& 0.0 & 2000.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %2000.0423718337847
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:setup9}
+	\end{table}
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & -400.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-400.0162154089848
+	\hline
+	\hspace{1em}2& 0.0 & -100.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-100.06384704599024
+	\hline
+	\hspace{1em}3& 0.0 & -70.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-70.04977729182792
+	\hline
+	\hspace{1em}4& 0.0 & -60.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-60.036372838521224
+	\hline
+	\hspace{1em}5& 0.0 & -70.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-70.00005703129563
+	\hline
+	\hspace{1em}6& 0.0 & -900.0 & 0.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-900.0418019049634
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:setup10}
+	\end{table}
+	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.2]{raport_graphs/simpMPDR.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup7}. Tryb badawczy.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup9}. Tryb badawczy.}
 		\label{fig:simpMPDR}
 	\end{figure}
 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.2]{raport_graphs/simpMPDRrevers.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup8}. Tryb badawczy.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup10}. Tryb badawczy.}
 		\label{fig:simpMPDRrevers}
 	\end{figure}
 		
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=1.1]{raport_graphs/simpMPDRall.pdf}
-		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup7}. Tryb badawczy.}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup9}. Tryb badawczy.}
 		\label{fig:simpMPDRall}
 	\end{figure}	
+	
+	\subsection{\texttt{move\_along\_motor\_trajectory\_trapezoid\_duration}}
+	
+	Testowanie funkcji działającej w~przestrzeni silników w~trybie czasowym, pozwalającej na osiągnięcie kilku kolejnych punktów przy jednym wywołaniu funkcji. 
+
+	\subsubsection{Proste działanie w~trybie niebadawczym}
+	Ponowiono badania funkcji zadającej całą trajektorię, nadając punkty do osiągnięcia podane w~tablicy \ref{fig:setup11}, zarówno dla każdego silnika oddzielnie, jak i~dla wszystkich naraz.
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{3em}|m{3.5em}|m{3em}|m{3em}|m{3em}|m{4em}|m{3em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_2 $ & $ q_3 $ & $q_4$ & $ q_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & 400.0 & 200.0 & -200.0 & 100.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-400.0144095369332
+	\hline
+	\hspace{1em}2& 0.0 & -100.0 & 100.0 & 20.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-100.06421548964671
+	\hline
+	\hspace{1em}3& 0.0 & -70.0 & 50.0 & 0.0 & -30.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-70.05025772296632
+	\hline
+	\hspace{1em}4& 0.0 & 350.0 & 100.0 & 200.0 & -50.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-8.869543149594518e-13
+	\hline
+	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 100.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-70.00006451911138
+	\hline
+	\hspace{1em}6& 0.0 & -1000.0 & -500.0 & 100.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-900.0344946730511
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:setup11}
+	\end{table}	
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMTD.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup11}.}
+		\label{fig:simpMTD}
+	\end{figure}
+	
+	Wykresy zgodnie z~przewidywaniem nie różnią się od tych z~rysunku \ref{fig:simpMTV}, gdyż nie ma czasu oczekiwania na pozostałe silniki.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.05]{raport_graphs/simpMTDall.pdf}
+		\caption{Wyniki testu trajektorii dla wszystkich silników funkcji \texttt{move\_along\_motor\_trajectory\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup11}.}
+		\label{fig:simpMTDall}
+	\end{figure}
+	
+	Porównanie wykresów \ref{fig:simpMTDall} z~\ref{fig:simpMTVall}, można z~łatwością zauważyć wydłużenie trajektorii silników, które mogłyby szybciej osiągnąć zadane punkty, lecz zgodnie z założeniami ich ruch trwa tyle ile zajmuje najdłuższa trajektoria.
+	
+	\subsubsection{Proste działanie w~trybie badawczym}	
+	Ponownie nie zauważono różnicy pomiędzy trybami normalnym i~badawczym. Ze względu na udowodnienie działania przy fladze \texttt{research\_mode} ustawionej na \textit{True} w~sekcji \ref{simpMPDR}, pominięto wykresy testów w~tej sekcji.
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{3em}|m{3.5em}|m{3em}|m{3em}|m{3em}|m{4em}|m{3em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_2 $ & $ q_3 $ & $q_4$ & $ q_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & 400.0 & 200.0 & -200.0 & 100.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-400.0144095369332
+	\hline
+	\hspace{1em}2& 0.0 & -100.0 & 100.0 & 20.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-100.06421548964671
+	\hline
+	\hspace{1em}3& 0.0 & -70.0 & 50.0 & 0.0 & -30.0 & 20.0 & 10&\hspace{2em}\checkmark\\ %-70.05025772296632
+	\hline
+	\hspace{1em}4& 0.0 & 350.0 & 100.0 & 200.0 & -50.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-8.869543149594518e-13
+	\hline
+	\hspace{1em}5& 0.0 & 400.0 & 0.0 & 0.0 & 100.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-70.00006451911138
+	\hline
+	\hspace{1em}6& 0.0 & -1000.0 & -500.0 & 100.0 & 0.0 & 20.0 & 10&\hspace{2em}\checkmark\\  %-900.0344946730511
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:setup12}
+	\end{table}	
+	
+	\subsection{\texttt{move\_to\_joint\_position\_trapezoid\_velocity}}
+	Testowanie funkcji działającej w~przestrzeni stawów w~trybie prędkościowym. Wykresy wyników rozszerzone zostały o~symulację odpowiedniego ruchu silników.
+	
+	\subsubsection{Proste działanie w~trybie badawczym}	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& -0.1006 & -0.4 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %400.01624549348827
+	\hline
+	\hspace{1em}2& -1.5419 & 100.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %100.06493977550167
+	\hline
+	\hspace{1em}3& 0.0197 & 100.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\ %100.05074855824355
+	\hline
+	\hspace{1em}4& 1.1335 & 350.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %350.03683107162874
+	\hline
+	\hspace{1em}5& 3.6581 & 400.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %400.0004100112147
+	\hline
+	\hspace{1em}6& -2.7381 & 2000.0 & 0.0 & 0.0 & 0.30 & 0.20&\hspace{2em}\checkmark\\  %2000.0423718337847
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:simpJPV}
+	\end{table}
+	
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{|m{2.5em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{4em}|m{5em}|}
+	\hline
+	silnik&$ q_i $ & $ q_f $ & $ v_i $ & $ v_f $ & $ v_{max} $ & $ a_{max} $&wynik symulacji\\
+	\hline
+	\hline
+	\hspace{1em}1& 0.0 & -400.0 & 0.0 & 0.0 & 25.0 & 10&\hspace{2em}\checkmark\\ %-400.0162154089848
+	\hline
+	\hspace{1em}2& 0.0 & -100.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-100.06384704599024
+	\hline
+	\hspace{1em}3& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\ %-70.04977729182792
+	\hline
+	\hspace{1em}4& 0.0 & -60.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-60.036372838521224
+	\hline
+	\hspace{1em}5& 0.0 & -70.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-70.00005703129563
+	\hline
+	\hspace{1em}6& 0.0 & -900.0 & 0.0 & 0.0 & 35.0 & 20&\hspace{2em}\checkmark\\  %-900.0418019049634
+	\hline
+	\end{tabular}
+	\caption{Wyniki symulacji najprostszego przypadku, badanie oddzielnych silników.}
+	\label{tab:simpJPVrevers}
+	\end{table}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.2]{raport_graphs/simpJPV.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPV}.}
+		\label{fig:simpJPV}
+	\end{figure}
+
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.2]{raport_graphs/simpJPVrevers.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPVrevers}.}
+		\label{fig:simpJPVrevers}
+	\end{figure}
+		
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpJPVall.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_velocity} przy nastawach z~tablicy \ref{tab:simpJPV}.}
+		\label{fig:simpJPVall}
+	\end{figure}
 	
 	
 \newpage	
