@@ -789,9 +789,9 @@
 	\label{tab:setup6}
 	\end{table}	
 	
-	\section{\texttt{move\_to\_motor\_position\_trapezoid\_duration}}
+	\subsection{\texttt{move\_to\_motor\_position\_trapezoid\_duration}}
 	Testowanie funkcji działającej w~przestrzeni silników w~trybie czasowym.
-	\subsection{Proste działanie w~trybie niebadawczym}
+	\subsubsection{Proste działanie w~trybie niebadawczym}
 	Wykonano testy analogiczne do tych z~sekcji \ref{sec:MPV}. Wyniki przedstawiono w~tabelach \ref{tab:setup7} i~\ref{tab:setup8} oraz  na wykresach \ref{fig:simpMPD}, \ref{fig:simpMPDrevers} i~\ref{fig:simpMPDall}. Warto zauważyć, że wywołanie funkcji, nie zawiera nadania prędkości i~przyśpieszenia maksymalnego. Podane w tabelach wartości są wpisane do plików konfiguracyjnych.
 
 	\begin{table}[H]
@@ -865,6 +865,32 @@
 	\end{figure}	
 	
 	Ważnym jest by zwrócić uwagę na fakt, że w~trybie czasowym wszystkie silniki pracują tak samo długo (patrz rysunek \ref{fig:simpMPDall}).
+	
+	\subsubsection{Proste działanie w~trybie badawczym}
+	Zgodnie z~sekcją \ref{sec:flags} nie spodziewana jest żadna różnica pomiędzy pracą funkcji w~trybie normalnym i~badawczym. Spowodowane jest to niebadaniem prędkości początkowych/końcowych, które były by zakazane oraz faktem, że tryb czasowy nie został stworzony do celu badania właściwości kinematycznych robota. 
+	Zadane dla ruchu są tożsame z~podanymi w~tabelach \ref{tab:setup7} oraz \ref{tab:setup8}. Wyniki badania podane, przedstawione na wykresach \ref{fig:simpMPDR},\ref{fig:simpMPDRrevers} oraz \ref{fig:simpMPDRall}, potwierdzają poprawne działanie funkcji.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.2]{raport_graphs/simpMPDR.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup7}. Tryb badawczy.}
+		\label{fig:simpMPDR}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.2]{raport_graphs/simpMPDRrevers.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup8}. Tryb badawczy.}
+		\label{fig:simpMPDRrevers}
+	\end{figure}
+		
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1.1]{raport_graphs/simpMPDRall.pdf}
+		\caption{Wyniki testu trajektorii dla silnika pierwszego funkcji \texttt{move\_to\_motor\_position\_trapezoid\_duration} przy nastawach z~tablicy \ref{tab:setup7}. Tryb badawczy.}
+		\label{fig:simpMPDRall}
+	\end{figure}	
+	
 	
 \newpage	
 \begin{thebibliography}{9}

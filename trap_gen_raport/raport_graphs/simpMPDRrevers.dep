@@ -1,0 +1,3 @@
+simpMPDRrevers.pdf: MatlabResults/[VEL]positions:q0:0q1:-400v0:0v1:0vmax:-20amax:-10.txt
+simpMPDRrevers.pdf: SymulationResults/MPDR:20.000000:10.000000:0.000000:-400.000000/joint-1-setpoint.txt
+simpMPDRrevers.pdf: SymulationResults/MPDR:20.000000:10.000000:0.000000:-400.000000/joint-1-result.txt
