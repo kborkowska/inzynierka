@@ -5,4 +5,31 @@
 \newblock {\em {Dokumentacja techniczno-ruchowa robotów IRb-6 i~IRb-60}},
   1978.
 
+\bibitem{ABB}
+{ABB Robotics Historical milestones}.
+\newblock
+  \url{https://new.abb.com/products/robotics/home/about-us/historical-milestones}.
+
+\bibitem{IRPOS}
+Wiki systemu {IrpOS}, 2016.
+\newblock \url{https://github.com/RCPRG-ros-pkg/irp6_robot/wiki}.
+
+\bibitem{robotVelma}
+{Documentation of control system of WUT Velma Robot}, 2017.
+\newblock
+  \url{https://rcprg-ros-pkg.github.io/velma_docs/2017/10/13/01_introduction_02_velma_robot/}.
+
+\bibitem{ROS}
+Oficjalna strona systemu {ROS}.
+\newblock \url{http://ros.org}.
+
+\bibitem{whatROS}
+What is {ROS}?
+\newblock
+  \url{https://www.generationrobots.com/blog/en/ros-robot-operating-system-2/}.
+
+\bibitem{actionlibROS}
+Dokumentacja biblioteki actionlib.
+\newblock \url{http://wiki.ros.org/actionlib}.
+
 \end{thebibliography}

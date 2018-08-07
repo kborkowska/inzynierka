@@ -2,31 +2,36 @@
 % TeX spellcheck = pl_PL 
 
 \chapter{Wstęp}
-\label{chapter:wstep}
+\label{ch:wstep}
 %Rozdział ten pełni funkcję wstępu do niniejszej pracy. Przybliża on jej tematykę
 %i cel oraz pokazuje układ rozdziałów. Przedstawia także motywację,
 %dzięki której zagadnienie to zostało zbadane.
 	
 	
 		\section{Wprowadzenie}
-		\label{Wprowadzenie}
+		\label{s:wprowadzenie}
 		%krótki opis zagadnienia
 		Mechanizmy imitujące ludzi i~zwierzęta wydają się być częścią wspólnej kulturowej świadomości od początku istnienia cywilizacji. Mitologie Egipcjan, Greków, Hindusów czy Izraelitów wspominają o~urządzeniach, które współczesny czytelnik mógłby nazwać robotami. Największe umysły w historii aspirowały do stworzenia pierwszego autonomicznego pracownika. Wśród pierwszych konstruktorów można znaleźć Leonardo da Vinci'ego, czy Archytas'a z~Tarentu. To, co dla naszych poprzedników pozostawało jedynie fikcją, stało się nieodzowną częścią przemysłu w~XX wieku. Już pierwsze roboty firmy Unimation cechowały się dokładnością znacznie przewyższająca możliwości ludzkie, dodatkowo zapewniając szybszą produkcję oraz większe bezpieczeństwo pracowników. 
 		
-		Jednym z~najczęściej spotkanych typów robotów przemysłowych jest manipulator. W~swej budowie przypominają one górne kończyny ludzkie. Zakończone są chwytakami, które choć z~zasady mają być odwzorowaniem ludzkiej dłoni, są raczej jej dużym uproszczeniem lub wręcz modyfikacją wprowadzoną do wykonania konkretnego zadania. Człowiek intuicyjnie wybiera rozwiązanie przypominające wytwory natury, przez co manipulatory znajdują szerokie zastosowanie w~najróżniejszych gałęziach przemysłu.  Sprzęt taki jak kamery, taśmy produkcyjne lub tor jezdny, to podstawowe rozszerzenia, jakie dodawane są do systemów robotycznych, w~celu automatyzacji kolejnych etapów produkcji. Od fabryk samochodów, po te skupiające się na wyrobach spożywczych, manipulatory są integralną częścią nowoczesnej cywilizacji.
+		Jednym z~najczęściej spotkanych typów robotów przemysłowych jest manipulator. W~swej budowie przypominają one górne kończyny ludzkie. Zakończone są chwytakami, które choć z~zasady mają być odwzorowaniem ludzkiej dłoni, są raczej jej dużym uproszczeniem lub wręcz modyfikacją wprowadzoną do wykonania konkretnego zadania. Człowiek intuicyjnie wybiera rozwiązanie przypominające wytwory natury, przez co manipulatory znajdują szerokie zastosowanie w~najróżniejszych gałęziach przemysłu.  Sprzęt taki jak kamery, taśmy produkcyjne lub tor jezdny, to podstawowe rozszerzenia, jakie dodawane są do systemów robotycznych, w~celu automatyzacji kolejnych etapów produkcji. Od fabryk samochodowych, po te skupiające się na wyrobach spożywczych, manipulatory są integralną częścią nowoczesnej cywilizacji.
 
 		
 		\section{Motywacja}
-		\label{Motywacja}
-		System IrpOS zapewnia prosty interfejs do pracy z~robotami IRp-6 znajdującymi się w~laboratorium 012 Wydziału Elektroniki i~Technik Informacyjnych. Za jego pomocą powstają prace dyplomowe, systemy prototypowe oraz prowadzone są zajęcia dydaktyczne. Jednakże istnieją obszary w~których można rozwinąć to oprogramowanie w~celu ułatwienia sterowania robotami. Pierwotnie system w~żaden sposób nie analizował zadanej trajektorii, po czym dodano sprawdzanie czy poszczególne punkty do osiągnięcia znajdują się w~przestrzeni roboczej sprzętu. W~obecnej postaci możliwe jest przekroczenie ograniczeń kinematycznych i~dynamicznych robota, poprzez zadanie zbyt krótkiego czasu na osiągnięcie kolejnych pozycji. Nowa funkcjonalność mogłaby przyśpieszyć tworzenie programów i~wykrywanie błędów, efektywnie prowadząc do prac lepszej jakości.
+		\label{s:motywacja}
+		System VelmOS zapewnia prosty interfejs do pracy z~robotem Velma (oraz jego symulacją) znajdującym się w~laboratorium P109 Wydziału Elektroniki i~Technik Informacyjnych. Wykorzystywany on jest do pisania prac naukowych oraz prowadzania zajęć dydaktycznych. Oprogramowanie to jest wciąż rozwijane, a~nowe zapotrzebowania są definiowane w~trakcie tego procesu. Obecnie zaimplementowane są dwa rodzaje generatorów trajektorii: spline'owy oraz kartezjański. Stworzone są dla nich oddzielne stany subsystemu \texttt{velma\_core\_cs}. Jednakże żaden z nich nie zapewnia odpowiedniego stopnia kontroli profilu prędkościowego w~każdym ze stawów. Nowa funkcjonalność, oparta na generatorze trajektorii o~innych właściwościach, mogłaby znaleźć zastosowanie przy różnorodnych badaniach naukowych oraz analizowaniu samego robota. 
 		
-		%System nie informuje a~priori użytkownika o~zadaniu zbyt krótkiego czasu ruchu robota w~żadnym z~trybów pracy. 
+		
+		
+		%Pierwotnie system w~żaden sposób nie analizował zadanej trajektorii, po czym dodano sprawdzanie czy poszczególne punkty do osiągnięcia znajdują się w~przestrzeni roboczej sprzętu. W~obecnej postaci możliwe jest przekroczenie ograniczeń kinematycznych i~dynamicznych robota, poprzez zadanie zbyt krótkiego czasu na osiągnięcie kolejnych pozycji. Nowa funkcjonalność mogłaby przyśpieszyć tworzenie programów i~wykrywanie błędów, efektywnie prowadząc do prac lepszej jakości.
+		
+		%System nie informuje a~priori użytkownika o~zadaniu zbyt krótkiego czasu ruchu robota w~żadnym z~trybów pracy. Rviz
 		
 		
 		\section{Cel pracy}
-		\label{Cel}
-		Celem niniejszej pracy było stworzenie dodatkowej funkcjonalności systemu IrpOS, która nie pozwoliłaby użytkownikowi na zadanie za krótkiego czasu ruchu. Dodatkowo do terminala wysyłana jest informacja o~popełnionym błędzie. Skupiono się na stworzeniu rozwiązania działającego w~przestrzeni stawów. Nie zmieniono interfejsu użytkownika, a jedynie dodano analizę trajektorii po odebraniu polecania przez system. Obliczone zostają maksymalne prędkość i~przyśpieszenie potrzebne do osiągnięcia zadanej konfiguracji w~danym czasie dla kolejno każdego stawu. Jeśli którykolwiek ruch powoduje przekroczenie ograniczeń kinematycznych lub dynamicznych, wywołana zostaje wyżej wspomniana procedura. 
+		\label{s:cel}
+		Celem niniejszej pracy było stworzenie dodatkowej funkcjonalności systemu VelmOS, która pozwoliłaby na większą kontrolę osiąganej prędkości w~kolejnych stawach robota.
+		Pracę rozpoczęto od alegorycznej modyfikacji systemu IrpOS, gdyż jest on prostszą wersją oprogramowania robota Velma. Zdecydowano zaimplementować dodatkowy generator trajektorii, istniejący w~systemie równolegle z~już istniejącymi generatorami. Jego funkcjonalność rozszerzano poprzez definiowanie trybów i~podtrybów działania. Nowy generator produkuje trajektorię o~profilu trapezoidalnym. System dostosowano do pracy w~trybie ,,trapezoidalnym'' nowymi funkcjami interfejsu i~zmianami wprowadzonymi do plików konfiguracyjnych. Na sam generator nałożono restrykcje, które często są charakterystyczne dla tego typu ruchu. Naruszenie którejkolwiek z~nich powoduje specyficzną odpowiedź dla użytkownika. W~pracy ograniczono się do przeprowadzania badań za pomocą symulacji.
 		
 		\section{Struktura pracy}
-		\label{Struktura}
-		Praca składa się z~sześciu rozdziałów. Rozdział 2~przedstawia sprzęt i~narzędzia wykorzystywane do stworzenia pracy. Rozdział 3~prezentuje projekt rozwiązania wybranego problemu. Rozdział 4~opisuje jak realizowano zaproponowane rozwiązanie. Rozdział 5~skupia się na sposobie i~wynikach badania poprawności działania nowej funkcjonalności. Rozdział 6~podsumowuje wyniki pracy.
+		\label{s:struktura}
+		Praca składa się z~sześciu rozdziałów. Rozdział 2~przedstawia sprzęt i~narzędzia wykorzystywane do stworzenia pracy. Rozdział 3~prezentuje projekt rozwiązania wybranego problemu. Rozdział 4~opisuje jak zrealizowano zaproponowane rozwiązanie. Rozdział 5~skupia się na sposobie i~wynikach badania poprawności działania nowej funkcjonalności. Rozdział 6~podsumowuje wyniki pracy.

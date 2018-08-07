@@ -6,9 +6,16 @@
 \contentsline {section}{\numberline {1.4}Struktura pracy}{4}{section.1.4}
 \contentsline {chapter}{\numberline {2}Wykorzystany sprz\IeC {\k e}t i~narz\IeC {\k e}dzia}{5}{chapter.2}
 \contentsline {section}{\numberline {2.1}Robot IRp-6}{5}{section.2.1}
-\contentsline {section}{\numberline {2.2}Oprogramowanie bazowe}{5}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}ROS}{5}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Open Robot Control Software }{5}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Connman}{5}{subsection.2.2.3}
-\contentsline {subsection}{\numberline {2.2.4}Rviz}{5}{subsection.2.2.4}
-\contentsline {section}{\numberline {2.3}System IRPOS}{5}{section.2.3}
+\contentsline {section}{\numberline {2.2}Robot Velma}{5}{section.2.2}
+\contentsline {section}{\numberline {2.3}Oprogramowanie bazowe}{6}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}ROS}{6}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Open Robot Control Software}{8}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.3}Connman}{8}{subsection.2.3.3}
+\contentsline {subsection}{\numberline {2.3.4}Rviz}{8}{subsection.2.3.4}
+\contentsline {subsection}{\numberline {2.3.5}Gazebo}{8}{subsection.2.3.5}
+\contentsline {section}{\numberline {2.4}System IrpOS}{8}{section.2.4}
+\contentsline {section}{\numberline {2.5}System VelmOS}{8}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}rqt\_agent}{8}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}show\_collisions}{8}{subsection.2.5.2}
+\contentsline {subsection}{\numberline {2.5.3}show\_joints}{8}{subsection.2.5.3}
+\contentsline {section}{\numberline {2.6}Algorytmy}{8}{section.2.6}
